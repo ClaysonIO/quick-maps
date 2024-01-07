@@ -46,12 +46,11 @@ export function MapGroupPage() {
     }
 
     return (
-        <div style={{height: '100vh', width: '100vw'}}>
             <MapContainer
                 center={[28.795319, -81.308297]}
                 zoom={14}
                 scrollWheelZoom={true}
-                style={{height: '100%', width: '100%'}}
+                style={{width: '100%', height: '100%'}}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -82,7 +81,7 @@ export function MapGroupPage() {
                         getOptionLabel={(option) => option.name}
                         onChange={(event, newValue) => {
                             if(newValue){
-                                setAddressGroups(newValue.id);
+                                setAddressGroups(newValue._id);
                             }
                         }}
                         renderOption={(props, option) => (
@@ -95,14 +94,13 @@ export function MapGroupPage() {
                                 {' '}
                                 {option.name}
 
-                                <div>({addresses.filter(x=>x.groupId === option.id).length})</div>
+                                <div>({addresses.filter(x=>x.groupId === option._id).length})</div>
                             </Box>
                         )}
                     />
                 </Paper>
             </MapContainer>
 
-        </div>
     )
 }
 

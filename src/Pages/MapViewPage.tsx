@@ -44,7 +44,7 @@ export function MapViewPage() {
     const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
 
     return (
-        <div style={{height: '100vh', width: '100vw'}}>
+        <>
             <MapContainer
                 center={[28.795319, -81.308297]}
                 zoom={14}
@@ -76,8 +76,7 @@ export function MapViewPage() {
                 updateAddress={updateAddress}
                 handleClose={() => setSelectedAddress(null)}
             />}
-
-        </div>
+        </>
     )
 }
 
