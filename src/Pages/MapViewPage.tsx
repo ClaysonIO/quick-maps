@@ -1,8 +1,6 @@
 import React from 'react';
 import { MapContainer } from 'react-leaflet/MapContainer'
 import { TileLayer } from 'react-leaflet/TileLayer'
-import { useMap } from 'react-leaflet/hooks'
-import {Marker, Popup} from "react-leaflet";
 import 'leaflet/dist/leaflet.css'
 
 export function MapViewPage(){
