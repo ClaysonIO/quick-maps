@@ -24,6 +24,8 @@
 
 .group-A{
     background-color: #ff0000;
+    fill: #ff0000;
+    color: #ff0000;
 }
 .group-B{
     background-color: #00ff00;

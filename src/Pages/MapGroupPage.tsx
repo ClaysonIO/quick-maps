@@ -6,7 +6,8 @@ import {AddressStatus, IAddress, useAddresses, useGroups} from "../Hooks/useAddr
 import {Marker} from "react-leaflet";
 import L from 'leaflet';
 import {
-    Autocomplete, Avatar,
+    Autocomplete,
+    Box,
     Button,
     Dialog,
     DialogActions,
@@ -16,7 +17,6 @@ import {
 } from "@mui/material";
 
 export function MapGroupPage() {
-    const fileRef = React.useRef<HTMLInputElement>(null);
 
     const [selected, setSelected] = useState<string[]>([])
 
@@ -30,8 +30,8 @@ export function MapGroupPage() {
         return L.divIcon({className: 'my-div-icon pending'})
     }
 
-    const {addresses, updateAddress, setAddresses} = useAddresses();
-    const {groups, addGroup, removeGroup} = useGroups();
+    const {addresses, setAddresses} = useAddresses();
+    const {groups} = useGroups();
 
     function setAddressGroups(groupId: string){
         const selectedAddresses = addresses.map(x => {
@@ -85,6 +85,19 @@ export function MapGroupPage() {
                                 setAddressGroups(newValue.id);
                             }
                         }}
+                        renderOption={(props, option) => (
+                            <Box component="li" {...props} sx={{ gap: '1em' }}>
+                                <div className={option.className} style={{
+                                    height: '2em',
+                                    width: '2em',
+                                    borderRadius: '1em'
+                                }}/>
+                                {' '}
+                                {option.name}
+
+                                <div>({addresses.filter(x=>x.groupId === option.id).length})</div>
+                            </Box>
+                        )}
                     />
                 </Paper>
             </MapContainer>
