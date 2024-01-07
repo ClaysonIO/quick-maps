@@ -1,0 +1,102 @@
+.my-div-icon{
+    height: 25px !important;
+    width: 25px !important;
+    border-radius: 25px;
+    border: 2px solid black;
+}
+
+.pending{
+    background-color: blue;
+}
+
+.noAnswer{
+    background-color: yellow;
+}
+
+.success{
+    background-color: green;
+}
+
+.moved{
+    background-color: red;
+}
+
+
+.group-A{
+    background-color: #ff0000;
+}
+.group-B{
+    background-color: #00ff00;
+}
+.group-C{
+    background-color: #0000ff;
+}
+.group-D{
+    background-color: #ffff00;
+}
+.group-E{
+    background-color: #00ffff;
+}
+.group-F{
+    background-color: #ff00ff;
+}
+.group-G{
+    background-color: #ff8000;
+}
+.group-H{
+    background-color: #ff0080;
+}
+.group-I {
+    background-color: #80ff00;
+}
+.group-J{
+    background-color: #0080ff;
+}
+.group-K{
+    background-color: #8000ff;
+}
+.group-L{
+    background-color: #ff80ff;
+}
+.group-M{
+    background-color: #ff0080;
+}
+.group-N{
+    background-color: #ff8000;
+}
+.group-O{
+    background-color: #ff0080;
+}
+.group-P{
+    background-color: #ff8000;
+}
+.group-Q{
+    background-color: #ff0080;
+}
+.group-R{
+    background-color: #ff8000;
+}
+.group-S{
+    background-color: #ff0080;
+}
+.group-T{
+    background-color: #ff8000;
+}
+.group-U{
+    background-color: #ff0080;
+}
+.group-V{
+    background-color: #ff8000;
+}
+.group-W{
+    background-color: #ff0080;
+}
+.group-X{
+    background-color: #ff8000;
+}
+.group-Y{
+    background-color: #ff0080;
+}
+.group-Z{
+    background-color: #ff8000;
+}
