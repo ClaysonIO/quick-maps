@@ -75,7 +75,7 @@ export function GroupEditPage() {
                     />
                 ))}
 
-                <Paper style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em', position: "absolute", right: '1em', bottom: '2em', zIndex: 1000, width: '20em'}}>
+                <Paper style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em', position: "absolute", right: '1em', top: '2em', zIndex: 1000, width: '20em'}}>
 
                     <Button variant={'contained'} onClick={() => setSelected([])}>
                         Clear

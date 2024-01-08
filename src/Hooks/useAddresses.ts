@@ -31,12 +31,15 @@ export function useAddresses(groupId?: string) {
     const {data, error} = useQuery({
         queryKey: ['addresses'],
         queryFn: async () => {
+            await netlifyIdentity?.refresh()
             const response = await fetch('/.netlify/functions/get-addresses', {
                 headers: {
                     Authorization: `Bearer ${netlifyIdentity.currentUser()?.token?.access_token}`
                 }
             });
-            if (response.status === 401) throw new Error("401")
+            if (response.status === 401){
+                throw new Error("401")
+            }
             if (!response.ok) throw new Error(response.statusText)
             return (await response.json() ?? {}) as {addresses?: IAddress[]};
         },
@@ -45,6 +48,7 @@ export function useAddresses(groupId?: string) {
 
     const setAddressesMutation = useMutation({
         mutationFn: async (addresses: IAddress[]) => {
+            await netlifyIdentity?.refresh()
             const response = await fetch('/.netlify/functions/set-addresses', {
                 method: 'POST',
                 body: JSON.stringify({addresses}),
@@ -52,7 +56,9 @@ export function useAddresses(groupId?: string) {
                     Authorization: `Bearer ${netlifyIdentity.currentUser()?.token?.access_token}`
                 }
             });
-            if (response.status === 401) throw new Error("401")
+            if (response.status === 401){
+                throw new Error("401")
+            }
             if (!response.ok) throw new Error(response.statusText)
             return response.json();
         },
@@ -63,6 +69,7 @@ export function useAddresses(groupId?: string) {
 
     const addVisitMutation = useMutation({
         mutationFn: async ({_id, visit}: {_id: string, visit: IAddressVisit}) => {
+            await netlifyIdentity?.refresh()
             const response = await fetch('/.netlify/functions/add-visit', {
                 method: 'POST',
                 body: JSON.stringify({_id, visit}),
@@ -70,7 +77,9 @@ export function useAddresses(groupId?: string) {
                     Authorization: `Bearer ${netlifyIdentity.currentUser()?.token?.access_token}`
                 }
             });
-            if (response.status === 401) throw new Error("401")
+            if (response.status === 401){
+                throw new Error("401")
+            }
             if (!response.ok) throw new Error(response.statusText)
             return response.json();
         },

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {IAddress, useAddresses} from "../Hooks/useAddresses.ts";
 import XLSX from "xlsx";
 import {Button, TextField} from "@mui/material";
-import axios from "axios";
 import netlifyIdentity from "netlify-identity-widget";
 
 export function SettingsPage() {
@@ -62,8 +61,10 @@ export function SettingsPage() {
 
     const [users, setUsers] = useState<string>('')
 
-    function addUsers(){
+    async function addUsers(){
         const splitUsers = users.split('\n')
+
+        await netlifyIdentity.refresh();
 
         fetch('/.netlify/functions/add-users', {
             method: 'POST',
@@ -72,6 +73,8 @@ export function SettingsPage() {
                 Authorization: `Bearer ${netlifyIdentity.currentUser()?.token?.access_token}`
             }
         });
+
+        setUsers('')
     }
 
     return <div style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em'}}>
