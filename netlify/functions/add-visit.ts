@@ -8,7 +8,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     const dbUser = await mongo.FindOne({collection: 'quick-maps_users', filter: {email: user.email}});
     if(!dbUser) return {statusCode: 401};
 
-    const {ts} = JSON.parse(event.body ?? '{}');
+    const {_id, visit} = JSON.parse(event.body ?? '{}');
 
 
     //Get all journals tied to this user
