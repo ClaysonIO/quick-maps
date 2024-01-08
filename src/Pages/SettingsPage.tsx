@@ -23,22 +23,20 @@ export function SettingsPage() {
             url: '',
             lat: x.Latitude,
             lng: x.Longitude,
-            status: 'pending',
+            status: 'not-visited',
             history: []
         }) as IAddress);
 
         setAddresses(newAddresses)
     };
 
-    return <div>
+    return <div style={{padding: '1em'}}>
 
 
-        <div style={{position: "absolute", right: '1em', bottom: '2em', zIndex: 1000}}>
 
             <Button variant={'contained'} onClick={()=>fileRef.current?.click()}>
                 Add Addresses
             </Button>
             <input ref={fileRef} type={'file'} onChange={uploadAddresses} style={{display: 'none'}}/>
-        </div>
   </div>;
 }

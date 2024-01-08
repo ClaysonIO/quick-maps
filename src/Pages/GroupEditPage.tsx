@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {MapContainer} from 'react-leaflet/MapContainer'
 import {TileLayer} from 'react-leaflet/TileLayer'
 import 'leaflet/dist/leaflet.css'
-import {AddressStatus, IAddress, useAddresses, useGroups} from "../Hooks/useAddresses.ts";
+import {IAddress, useAddresses} from "../Hooks/useAddresses.ts";
 import {Marker} from "react-leaflet";
 import L from 'leaflet';
 import {
@@ -15,14 +15,15 @@ import {
     DialogTitle, Paper,
     TextField
 } from "@mui/material";
+import {useGroups} from "../Hooks/useGroups.ts";
 
-export function MapGroupPage() {
+export function GroupEditPage() {
 
     const [selected, setSelected] = useState<string[]>([])
 
     function whichIcon(address: IAddress) {
         if(selected.indexOf(address._id) !== -1){
-            return L.divIcon({className: 'my-div-icon moved'})
+            return L.divIcon({className: `my-div-icon selected ${address.groupId ? 'group-' + address.groupId : ''}`})
         }
         if(address.groupId){
             return L.divIcon({className: `my-div-icon group-${address.groupId}`})
@@ -64,7 +65,11 @@ export function MapGroupPage() {
                         icon={whichIcon(address)}
                         eventHandlers={{
                             click: () => {
-                                setSelected([...selected, address._id]);
+                                if(selected.indexOf(address._id) === -1) {
+                                    setSelected([...selected, address._id])
+                                } else {
+                                    setSelected(selected.filter(x => x !== address._id))
+                                }
                             }
                         }}
                     />
@@ -101,58 +106,5 @@ export function MapGroupPage() {
                 </Paper>
             </MapContainer>
 
-    )
-}
-
-export const MapIconStatusDialog = ({address, updateAddress, handleClose}: {
-    handleClose: () => void,
-    address: IAddress,
-    updateAddress: (address: Pick<IAddress, '_id' | 'status'>) => void
-}) => {
-
-
-    function saveChanges() {
-
-        updateAddress({_id: address._id, status: value.value})
-        handleClose()
-    }
-
-    const options: { label: string, value: AddressStatus }[] = [
-        {label: 'Pending', value: 'pending'},
-        {label: 'No Answer', value: 'noAnswer'},
-        {label: 'Success', value: 'success'},
-        {label: 'Moved', value: 'moved'},
-    ]
-
-    const [value, setValue] = React.useState(options.find(x => x.value === address.status) ?? options[0])
-
-
-    return (
-        <Dialog fullWidth open={true} onClose={() => handleClose()}>
-            <DialogTitle>Address</DialogTitle>
-            <DialogContent sx={{display: 'flex', flexDirection: 'column', gap: '1em'}}>
-                <div>{address.name}</div>
-                <div>{address.address}</div>
-
-                <Autocomplete
-                    renderInput={params => (<TextField
-                        {...params}
-                        label={"Status"}
-                    />)}
-                    options={options}
-                    value={value}
-                    onChange={(event, newValue) => {
-                        if (newValue) {
-                            setValue(newValue)
-                        }
-                    }}
-                />
-
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => handleClose()}>Cancel</Button>
-                <Button onClick={() => saveChanges()}>Save Changes</Button>
-            </DialogActions>
-        </Dialog>
     )
 }

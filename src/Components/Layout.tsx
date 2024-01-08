@@ -1,5 +1,6 @@
 import {Outlet} from "react-router";
-import {AppBar, Box, Button, IconButton, Toolbar, Typography, MenuItem, Menu} from "@mui/material";
+import {NavLink} from "react-router-dom";
+import {AppBar, Box, IconButton, Toolbar, Typography, MenuItem, Menu} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
 
@@ -30,9 +31,8 @@ export function Layout() {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        News
+                        Quick Maps
                     </Typography>
-                    <Button color="inherit">Login</Button>
                 </Toolbar>
 
 
@@ -51,7 +51,10 @@ export function Layout() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem component={NavLink} to={'/map'} onClick={handleClose}>All Addresses</MenuItem>
+                    <MenuItem component={NavLink} to={'/groups'} onClick={handleClose}>Groups</MenuItem>
+                    <MenuItem component={NavLink} to={'/groups/edit'} onClick={handleClose}>Edit Groups</MenuItem>
+                    <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>
                     <MenuItem onClick={handleClose}>My account</MenuItem>
                 </Menu>
             </AppBar>

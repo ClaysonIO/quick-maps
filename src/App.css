@@ -1,24 +1,25 @@
 .my-div-icon{
+    box-sizing: border-box;
     height: 25px !important;
     width: 25px !important;
     border-radius: 25px;
     border: 2px solid black;
+    background-color: rgba(220, 220, 220, 0.63);
 }
 
-.pending{
-    background-color: blue;
+.selected{
+    border-color: #ff0000;
+    border-width: 5px;
 }
 
-.noAnswer{
-    background-color: yellow;
-}
-
-.success{
-    background-color: green;
-}
-
-.moved{
-    background-color: red;
+.address-correct{ background-color: #31ff00}
+.not-resolved{ background-color: #0051ff}
+.no-answer{ background-color: #ffcc00}
+.no-access{ background-color: #a20095}
+.moved{ background-color: #ff0000}
+.deceased{ background-color: #000000}
+.other{ background-color: #FFFFFF}
+.not-visited{ background-color: #8d8d8d
 }
 
 

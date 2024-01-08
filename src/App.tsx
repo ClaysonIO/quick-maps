@@ -1,7 +1,7 @@
 import './App.css'
 import {MapViewPage} from "./Pages/MapViewPage.tsx";
-import {Route, BrowserRouter, Routes} from "react-router-dom";
-import {MapGroupPage} from "./Pages/MapGroupPage.tsx";
+import {Route, BrowserRouter, Routes, Navigate} from "react-router-dom";
+import {GroupEditPage} from "./Pages/GroupEditPage.tsx";
 import {SettingsPage} from "./Pages/SettingsPage.tsx";
 import {GroupListPage} from "./Pages/GroupListPage.tsx";
 import {Layout} from "./Components/Layout.tsx";
@@ -15,8 +15,9 @@ function App() {
                     <Route path="/map" element={<MapViewPage/>}/>
                     <Route path="/map/:groupId" element={<MapViewPage/>}/>
                     <Route path={"/groups"} element={<GroupListPage/>}/>
-                    <Route path="/groups/create" element={<MapGroupPage/>}/>
+                    <Route path="/groups/edit" element={<GroupEditPage/>}/>
                     <Route path="/settings" element={<SettingsPage/>}/>
+                    <Route path={"*"} element={<Navigate to={"/map"}/>}/>
                 </Route>
             </Routes>
         </BrowserRouter>
