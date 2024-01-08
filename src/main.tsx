@@ -4,7 +4,12 @@ import App from './App.tsx'
 import netlifyIdentity from 'netlify-identity-widget'
 import './index.css'
 
-netlifyIdentity.init()
+netlifyIdentity.init({
+})
+
+netlifyIdentity.on('login', () => {
+    window.location.reload();
+});
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
