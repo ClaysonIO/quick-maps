@@ -1,4 +1,4 @@
-import {IAddress} from "../Hooks/useAddresses.ts";
+import {IAddress, IAddressVisit} from "../Hooks/useAddresses.ts";
 import {useVisitResolutions, VisitResolution} from "../Hooks/useVisitResolutions.ts";
 import React from "react";
 import {Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
@@ -7,7 +7,7 @@ import {HistoryItem} from "./HistoryItem.tsx";
 export const MapIconStatusDialog = ({address, addVisit, handleClose}: {
     handleClose: () => void,
     address: IAddress,
-    addVisit: (_id: string, newHistory: IAddress['history'][0]) => void
+    addVisit: (_id: string, newHistory: IAddressVisit) => void
 }) => {
 
     const {visitResolutions: options} = useVisitResolutions();

@@ -1,8 +1,8 @@
-import {IAddress} from "../Hooks/useAddresses.ts";
+import {IAddress, IAddressVisit} from "../Hooks/useAddresses.ts";
 import {Paper} from "@mui/material";
 import React from "react";
 
-export const HistoryItem = ({item}: { item: IAddress['history'][0] }) => {
+export const HistoryItem = ({item}: { item: IAddressVisit }) => {
     return <Paper style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em'}}>
         <div style={{display: 'flex', gap: '1em', justifyContent: 'space-between', alignItems: 'center'}}>
             <div className={'my-div-icon ' + item.status.toLocaleLowerCase()} style={{width: '1em', height: '1em'}}></div>
