@@ -27,7 +27,8 @@ export const MapIconStatusDialog = ({address, addVisit, handleClose}: {
         <Dialog fullWidth open={true} onClose={() => handleClose()}>
             <DialogTitle>Record a Visit</DialogTitle>
             <DialogContent sx={{display: 'flex', flexDirection: 'column', gap: '1em'}}>
-                <div>{!!address.url && <a href={address.url} target={'_blank'}>Member Information</a>}</div>
+                {address.names.map((name, index) => <div key={index}>{name}</div>)}
+
                 <div>{address.address}</div>
 
                 <div style={{display: 'flex', gap: '1em'}}>

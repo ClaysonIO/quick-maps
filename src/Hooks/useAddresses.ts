@@ -14,7 +14,7 @@ export interface IAddress {
     _id: string;
     address: string;
     url: string;
-    name: string;
+    names: string[];
     lat: number;
     lng: number;
     groupId?: string;
