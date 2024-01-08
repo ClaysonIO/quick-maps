@@ -3,7 +3,7 @@ import {MongoDB} from "./Utilities/MongoDB";
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
     const { user } = context.clientContext!;
-    if(!user) return {statusCode: 401};
+    if(!user || !user.email) return {statusCode: 401};
     const mongo = new MongoDB({});
     const dbUser = await mongo.FindOne({collection: 'quick-maps_users', filter: {
         email: user.email
