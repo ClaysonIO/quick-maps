@@ -35,9 +35,9 @@ export function useAddresses(groupId?: string) {
             });
             if (response.status === 401) throw new Error("401")
             if (!response.ok) throw new Error(response.statusText)
-            return (await response.json() ?? []) as IAddress[];
+            return (await response.json() ?? {}) as {addresses?: IAddress[]};
         },
-        placeholderData: []
+        placeholderData: {addresses: []}
     })
 
     const mutation = useMutation({
