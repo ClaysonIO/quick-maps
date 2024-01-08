@@ -4,7 +4,7 @@ This is a tool for having a shared map for visiting a large number of people. Ou
 
 
 ## Setup
-This is a Netlify application, and uses netlify functions. It requires the following environment variables to be set in order to store the data in MongoDB Atlas: 
+This is a Netlify application, and uses netlify functions. It requires the following environment variables to be set in order to store the data in MongoDB Atlas using the Data API: 
 
 | Variable | Description                              |
 | -------- |------------------------------------------|
