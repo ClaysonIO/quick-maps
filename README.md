@@ -1,30 +1,14 @@
-# React + TypeScript + Vite
+# Quick Maps
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a tool for having a shared map for visiting a large number of people. Our congregation has a lot of people who are on our records, but we don't know if they're still in the area or not. This tool allows us to have a map that we can all see and update, so we can see who is still in the area and who isn't. It uses Netlify authentication to control who has access to the map, and only has addresses within the tool -- all names and other information are kept in a separate system, accessed via a url with a separate authentication system.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup
+This is a Netlify application, and uses netlify functions. It requires the following environment variables to be set in order to store the data in MongoDB Atlas: 
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+| Variable | Description                              |
+| -------- |------------------------------------------|
+| `MONGO_DATABASE` | The name of the Mongo Database           |
+| `MONGO_DATA_SOURCE` | The Data Source value from MongoDB Atlas |
+| `MONGO_DATA_API_APP_ID` | The Data API App ID from MongoDB Atlas   |
+| `MONGO_API_KEY` | The API Key for MongoDB Atlas           |
