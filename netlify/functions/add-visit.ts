@@ -6,7 +6,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     if(!user || !user.email) return {statusCode: 401};
     const mongo = new MongoDB({});
     const dbUser = await mongo.FindOne({collection: 'quick-maps_users', filter: {
-        email: user.email
+        email: user.email.toLowerCase()
     }});
     if(!dbUser) return {statusCode: 401};
 
