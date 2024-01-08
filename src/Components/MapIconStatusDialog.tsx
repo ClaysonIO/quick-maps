@@ -27,9 +27,9 @@ export const MapIconStatusDialog = ({address, addVisit, handleClose}: {
         <Dialog fullWidth open={true} onClose={() => handleClose()}>
             <DialogTitle>Record a Visit</DialogTitle>
             <DialogContent sx={{display: 'flex', flexDirection: 'column', gap: '1em'}}>
-                {address.names.map((name, index) => <div key={index}>{name}</div>)}
+                {address.names?.map((name, index) => <div key={index}>{name}</div>)}
 
-                <div>{address.address}</div>
+                <a href={`https://www.google.com/maps/search/?api=1&query=${address.address}`} target={'_blank'}>{address.address}</a>
 
                 <div style={{display: 'flex', gap: '1em'}}>
 

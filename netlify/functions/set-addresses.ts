@@ -12,7 +12,10 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 
     const documents = JSON.parse(event.body ?? '{}').addresses ?? [];
 
+    console.log("Has Addresses", documents.length);
+
     // Add addresses to the database
+    await mongo.DeleteMany({collection: 'quick-maps_addresses', filter: {}});
     await mongo.InsertMany({documents, collection: 'quick-maps_addresses'});
 
     return {

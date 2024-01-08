@@ -151,6 +151,24 @@ export class MongoDB{
         )
     }
 
+    public DeleteMany<T>({update, upsert, collection, filter, projection}: {
+        update?: any,
+        upsert?: boolean,
+        collection: string,
+        filter?: {[key: string]: any},
+        projection?: {[key: string]: any}}): Promise<T>{
+        return simplePost<T>(this.buildConfig({
+            action: 'deleteMany',
+            data: this.buildData({
+                collection,
+                filter: {...filter},
+                projection,
+                update,
+                upsert
+            })})
+        )
+    }
+
     public async GetHighestId({collection}: {collection: string}): Promise<number>{
         const item = await simplePost<{documents: {id: number}[]}>(this.buildConfig({
             action: 'find',
