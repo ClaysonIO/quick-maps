@@ -3,6 +3,8 @@ import {NavLink} from "react-router-dom";
 import {AppBar, Box, IconButton, Toolbar, Typography, MenuItem, Menu} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
+import netlifyIdentity from 'netlify-identity-widget'
+
 
 export function Layout() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -55,7 +57,7 @@ export function Layout() {
                     <MenuItem component={NavLink} to={'/groups'} onClick={handleClose}>Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/groups/edit'} onClick={handleClose}>Edit Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={()=>netlifyIdentity.open()}>Login</MenuItem>
                 </Menu>
             </AppBar>
         </Box>
