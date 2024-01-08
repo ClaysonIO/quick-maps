@@ -57,7 +57,7 @@ export function Layout() {
                     <MenuItem component={NavLink} to={'/groups'} onClick={handleClose}>Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/groups/edit'} onClick={handleClose}>Edit Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>
-                    <MenuItem onClick={()=>netlifyIdentity.open()}>Login</MenuItem>
+                    <MenuItem onClick={()=>netlifyIdentity.logout()}>Log Out</MenuItem>
                 </Menu>
             </AppBar>
         </Box>

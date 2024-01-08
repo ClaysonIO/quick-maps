@@ -16,14 +16,12 @@ export class MongoDB{
     private readonly dataSource: string;
     private readonly dataAPIAppId: string;
     private readonly apiKey: string;
-    private readonly userId: string;
 
-    constructor({database, dataSource, dataAPIAppId, apiKey, userId}: {userId: string, database?: string, dataSource?: string, dataAPIAppId?: string, apiKey?: string}) {
+    constructor({database, dataSource, dataAPIAppId, apiKey}: {database?: string, dataSource?: string, dataAPIAppId?: string, apiKey?: string}) {
         this.database = database ?? process.env.MONGO_DATABASE ?? "";
         this.dataSource = dataSource ?? process.env.MONGO_DATA_SOURCE ?? "";
         this.dataAPIAppId = dataAPIAppId ?? process.env.MONGO_DATA_API_APP_ID ?? "";
         this.apiKey = apiKey ?? process.env.MONGO_API_KEY ?? "";
-        this.userId = userId;
     }
 
     private buildData({
@@ -76,7 +74,7 @@ export class MongoDB{
             action: 'findOne',
             data: this.buildData({
                 collection,
-                filter: {...filter, userId: this.userId},
+                filter: {...filter},
                 projection
             })})
         )
@@ -87,7 +85,7 @@ export class MongoDB{
             action: 'find',
             data: this.buildData({
                 collection,
-                filter: {...filter, userId: this.userId},
+                filter: {...filter},
                 projection
             })}))
             .then(({documents})=>documents);
@@ -99,7 +97,7 @@ export class MongoDB{
             data: this.buildData({
                 collection,
                 projection,
-                document: {...document, userId: this.userId}
+                document: {...document}
             })})
         )
     }
@@ -111,7 +109,7 @@ export class MongoDB{
                 data: this.buildData({
                     collection,
                     projection,
-                    documents: documents?.map(x=>({...x, userId: this.userId})) ?? []
+                    documents: documents?.map(x=>({...x})) ?? []
                 })
             })
         )
@@ -127,7 +125,7 @@ export class MongoDB{
             action: 'updateOne',
             data: this.buildData({
                 collection,
-                filter: {...filter, userId: this.userId},
+                filter: {...filter},
                 projection,
                 update,
                 upsert
@@ -145,7 +143,7 @@ export class MongoDB{
             action: 'updateMany',
             data: this.buildData({
                 collection,
-                filter: {...filter, userId: this.userId},
+                filter: {...filter},
                 projection,
                 update,
                 upsert
@@ -160,7 +158,6 @@ export class MongoDB{
                 collection,
                 database: this.database,
                 dataSource: this.dataSource,
-                filter: {userId: this.userId},
                 sort: {id: -1},
                 limit: 1
             })
