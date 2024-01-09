@@ -1,13 +1,13 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import netlifyIdentity from "netlify-identity-widget";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {IAddress, IAddressVisit} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export function useAddresses(groupId?: string) {
 
     const queryClient = useQueryClient();
 
-    const {data, error} = useQuery({
+    const {data, error, isLoading, isFetching} = useQuery({
         queryKey: ['addresses'],
         queryFn: async () => {
             await netlifyIdentity?.refresh()
@@ -43,6 +43,9 @@ export function useAddresses(groupId?: string) {
         },
         onSuccess:()=>{
             queryClient.invalidateQueries({queryKey: ['addresses']});
+        },
+        onError: (error)=>{
+            setErrorString("Error setting addresses. Try again later. Error: " + error.message ?? "")
         }
     })
 
@@ -64,22 +67,27 @@ export function useAddresses(groupId?: string) {
         },
         onSuccess:()=>{
             queryClient.invalidateQueries({queryKey: ['addresses']});
+        },
+        onError: (error)=>{
+            setErrorString("Error adding visit. Try again later. Error: " + error.message ?? "")
         }
     })
 
 
 
+    const [errorString, setErrorString] = useState<string>("");
     useEffect(() => {
         if (error) {
             console.log(error);
             if (error.message === "401") {
-                window.alert("You do not have access to this resource. Please talk to the person who invited you.")
+                setErrorString("You do not have access to this resource. Please talk to the person who invited you.")
             } else {
-                window.alert("Error loading addresses. Try again later.")
+                setErrorString("Error loading addresses. Try again later. Error: " + error.message ?? "")
             }
+            console.error("ERROR", error)
         }
-        console.log("ERROR", error)
     }, [error])
+
 
     const addresses = data?.addresses ?? [];
     function setAddresses(addresses: IAddress[]) {
@@ -91,6 +99,8 @@ export function useAddresses(groupId?: string) {
     }
 
     return {
+        loading: isLoading || isFetching,
+        error: errorString,
         addresses: addresses.filter(address => groupId ? address.groupId === groupId : true),
         addVisit,
         setAddresses

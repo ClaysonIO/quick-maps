@@ -10,12 +10,17 @@ export async function isAuthorized(context: HandlerContext, isAdmin: boolean): P
     }>({collection: 'quick-maps_users', filter: {email: user.email.toLowerCase(), active: true}});
 
     if (!dbUser) {
-        await mongo.InsertOne({
-            collection: 'quick-maps_users', document: {
-                email: user.email.toLowerCase(),
-                isAdmin: false,
-                active: false
-            }
+        await mongo.UpdateOne({
+            collection: 'quick-maps_users',
+            filter: {email: user.email.toLowerCase()},
+            update: {
+                $set: {
+                    email: user.email.toLowerCase(),
+                    isAdmin: false,
+                    active: false
+                }
+            },
+            upsert: true
         });
         return false;
     }

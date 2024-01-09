@@ -5,11 +5,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
 import netlifyIdentity from 'netlify-identity-widget'
 import {useUsers} from "../Hooks/useUsers.ts";
+import {LoadingIndicator} from "./LoadingIndicator.tsx";
+import {ErrorBar} from "./ErrorBar.tsx";
+import {useAddresses} from "../Hooks/useAddresses.ts";
 
 
 export function Layout() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+    const { error, loading} = useAddresses();
     const {isAdmin} = useUsers()
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -68,5 +72,7 @@ export function Layout() {
         <div style={{flex: 1}}>
             <Outlet/>
         </div>
+        <LoadingIndicator loading={loading}/>
+        <ErrorBar error={error}/>
     </div>
 }

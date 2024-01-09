@@ -12,7 +12,7 @@ export const visitResolutionSchema = z.union([
 ])
 
 export const AddressVisitSchema = z.object({
-    date: z.date(),
+    date: z.coerce.date(),
     status: visitResolutionSchema,
     notes: z.string(),
     user: z.string()
