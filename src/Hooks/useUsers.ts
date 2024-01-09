@@ -59,7 +59,7 @@ export function useUsers() {
 
     const isAdmin = useMemo(()=>{
         return data.some(user=>user.email === netlifyIdentity.currentUser()?.email && user.isAdmin)
-    }, [])
+    }, [data])
 
     return {data, setUsersMutation, isAdmin}
 }
