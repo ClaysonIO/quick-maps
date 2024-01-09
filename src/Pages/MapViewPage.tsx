@@ -2,11 +2,12 @@ import React from 'react';
 import {MapContainer} from 'react-leaflet/MapContainer'
 import {TileLayer} from 'react-leaflet/TileLayer'
 import 'leaflet/dist/leaflet.css'
-import {IAddress, useAddresses} from "../Hooks/useAddresses.ts";
+import {useAddresses} from "../Hooks/useAddresses.ts";
 import {Marker} from "react-leaflet";
 import L from 'leaflet';
 import {useParams} from "react-router";
 import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
+import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export function MapViewPage() {
     const {groupId} = useParams() as { groupId: string };

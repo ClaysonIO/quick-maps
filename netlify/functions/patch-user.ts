@@ -1,15 +1,17 @@
 import {Handler, HandlerEvent, HandlerContext} from "@netlify/functions";
 import {isAuthorized} from "./Utilities/isAuthorized";
 import {MongoDB} from "./Utilities/MongoDB";
+import {userSchema} from "./add-users";
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
     if (!await isAuthorized(context, true)) return {statusCode: 401};
     const mongo = new MongoDB({});
 
-    const user = JSON.parse(event.body ?? '{}');
+    const user = userSchema.pick({_id: true, active: true})
+        .parse(JSON.parse(event.body ?? '{}'));
 
-    console.log("PATCHING USER", user)
-    // Add addresses to the database
+    if(!user._id) return {statusCode: 400};
+
     const users = await mongo.UpdateMany({
         collection: 'quick-maps_users',
         filter: {_id: {$oid: user._id}},

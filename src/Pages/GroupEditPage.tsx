@@ -2,20 +2,18 @@ import React, {useState} from 'react';
 import {MapContainer} from 'react-leaflet/MapContainer'
 import {TileLayer} from 'react-leaflet/TileLayer'
 import 'leaflet/dist/leaflet.css'
-import {IAddress, useAddresses} from "../Hooks/useAddresses.ts";
+import { useAddresses} from "../Hooks/useAddresses.ts";
 import {Marker} from "react-leaflet";
 import L from 'leaflet';
 import {
     Autocomplete,
     Box,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle, Paper,
+    Paper,
     TextField
 } from "@mui/material";
 import {useGroups} from "../Hooks/useGroups.ts";
+import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export function GroupEditPage() {
 

@@ -1,8 +1,8 @@
-import {IAddress, IAddressVisit} from "../Hooks/useAddresses.ts";
-import {useVisitResolutions, VisitResolution} from "../Hooks/useVisitResolutions.ts";
+import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import React from "react";
 import {Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import {HistoryItem} from "./HistoryItem.tsx";
+import {IAddress, IAddressVisit, VisitResolution} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export const MapIconStatusDialog = ({address, addVisit, handleClose}: {
     handleClose: () => void,

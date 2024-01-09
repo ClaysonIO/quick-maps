@@ -1,28 +1,7 @@
-import {VisitResolution} from "./useVisitResolutions.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import netlifyIdentity from "netlify-identity-widget";
 import {useEffect} from "react";
-
-export interface IAddressVisit {
-    date: Date,
-        status: VisitResolution;
-    notes: string;
-    user: string;
-}
-
-export interface IAddress {
-    _id: string;
-    address: string;
-    url: string;
-    names: string[];
-    lat: number;
-    lng: number;
-    groupId?: string;
-    status: VisitResolution;
-    history: IAddressVisit[]
-}
-
-
+import {IAddress, IAddressVisit} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export function useAddresses(groupId?: string) {
 

@@ -1,4 +1,4 @@
-export type VisitResolution = 'not-visited' | 'address-correct' | 'not-resolved' | 'no-answer' | 'no-access' | 'moved' | 'deceased' | 'other';
+import {VisitResolution} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export function useVisitResolutions(){
     const visitResolutions: {name: string, id: VisitResolution, color: string}[] = [

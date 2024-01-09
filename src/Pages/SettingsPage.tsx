@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {IAddress, useAddresses} from "../Hooks/useAddresses.ts";
 import XLSX from "xlsx";
 import {Button, TextField} from "@mui/material";
 import netlifyIdentity from "netlify-identity-widget";
+import {useAddresses} from "../Hooks/useAddresses.ts";
+import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export function SettingsPage() {
     const fileRef = React.useRef<HTMLInputElement>(null);

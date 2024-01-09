@@ -1,6 +1,6 @@
-import {IAddress, IAddressVisit} from "../Hooks/useAddresses.ts";
 import {Paper} from "@mui/material";
 import React from "react";
+import {IAddressVisit} from "../../netlify/functions/Types/AddressSchema.ts";
 
 export const HistoryItem = ({item}: { item: IAddressVisit }) => {
     return <Paper style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em'}}>

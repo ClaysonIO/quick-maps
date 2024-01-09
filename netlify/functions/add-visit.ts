@@ -1,6 +1,7 @@
 import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import {MongoDB} from "./Utilities/MongoDB";
 import {isAuthorized} from "./Utilities/isAuthorized";
+import {AddressVisitSchema} from "./Types/AddressSchema";
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
 
@@ -9,6 +10,8 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 
     const {_id, visit} = JSON.parse(event.body ?? '{}');
     const { user } = context.clientContext!;
+
+    const parssedVisit = AddressVisitSchema.parse(visit);
 
     await mongo.UpdateOne({
         collection: 'quick-maps_addresses',
@@ -19,7 +22,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
             },
             $push: {
                 history: {
-                    ...visit,
+                    ...parssedVisit,
                     user: user.email,
                     date: new Date()
                 }
