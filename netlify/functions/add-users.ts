@@ -1,24 +1,24 @@
 import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import {MongoDB} from "./Utilities/MongoDB";
 import {z} from "zod";
+import {isAuthorized} from "./Utilities/isAuthorized";
 
-const userSchema = z.object({
+export const userSchema = z.object({
     email: z.string().email(),
     _id: z.string().optional(),
+    active: z.boolean().optional(),
+    isAdmin: z.boolean().optional(),
 })
 
+export type IUser = z.infer<typeof userSchema>;
+
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
-    const { user } = context.clientContext!;
-    if(!user || !user.email) return {statusCode: 401};
+    if(!await isAuthorized(context, true)) return {statusCode: 401};
     const mongo = new MongoDB({});
-    const {document: dbUser} = await mongo.FindOne<{document: { _id: string, email: string, isAdmin: boolean }}>({collection: 'quick-maps_users', filter: {email: user.email.toLowerCase()}});
-
-    if(!dbUser?.isAdmin) return {statusCode: 401};
-
 
     const documents = JSON.parse(event.body ?? '{}').users ?? [];
 
-    const users = z.array(userSchema).parse(documents.map(x=>({email: x.toLowerCase()})));
+    const users = z.array(userSchema).parse(documents.map((x: any)=>({email: x.toLowerCase(), active: true})));
 
     // Add addresses to the database
     await mongo.InsertMany({documents: users, collection: 'quick-maps_users'});

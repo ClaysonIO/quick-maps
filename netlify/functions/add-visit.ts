@@ -1,16 +1,14 @@
 import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import {MongoDB} from "./Utilities/MongoDB";
+import {isAuthorized} from "./Utilities/isAuthorized";
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
-    const { user } = context.clientContext!;
-    if(!user || !user.email) return {statusCode: 401};
+
+    if(!await isAuthorized(context, false)) return {statusCode: 401};
     const mongo = new MongoDB({});
-    const dbUser = await mongo.FindOne({collection: 'quick-maps_users', filter: {
-        email: user.email.toLowerCase()
-    }});
-    if(!dbUser) return {statusCode: 401};
 
     const {_id, visit} = JSON.parse(event.body ?? '{}');
+    const { user } = context.clientContext!;
 
     await mongo.UpdateOne({
         collection: 'quick-maps_addresses',

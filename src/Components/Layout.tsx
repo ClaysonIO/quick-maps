@@ -4,11 +4,13 @@ import {AppBar, Box, IconButton, Toolbar, Typography, MenuItem, Menu} from "@mui
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
 import netlifyIdentity from 'netlify-identity-widget'
+import {useUsers} from "../Hooks/useUsers.ts";
 
 
 export function Layout() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+    const {isAdmin} = useUsers()
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -56,7 +58,8 @@ export function Layout() {
                     <MenuItem component={NavLink} to={'/map'} onClick={handleClose}>All Addresses</MenuItem>
                     <MenuItem component={NavLink} to={'/groups'} onClick={handleClose}>Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/groups/edit'} onClick={handleClose}>Edit Groups</MenuItem>
-                    <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>
+                    {isAdmin && <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>}
+                    {isAdmin && <MenuItem component={NavLink} to={'/users'} onClick={handleClose}>Users</MenuItem>}
                     <MenuItem onClick={()=>netlifyIdentity.logout()}>Log Out</MenuItem>
                 </Menu>
             </AppBar>
