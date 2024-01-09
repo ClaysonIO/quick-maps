@@ -7,6 +7,7 @@ export const HistoryItem = ({item}: { item: IAddressVisit }) => {
         <div style={{display: 'flex', gap: '1em', justifyContent: 'space-between', alignItems: 'center'}}>
             <div className={'my-div-icon ' + item.status.toLocaleLowerCase()} style={{width: '1em', height: '1em'}}></div>
             <div style={{fontWeight: 'bold', flex: 1}}>{item.status.toLocaleUpperCase()}</div>
+            <small>{item.user}</small>
             <small>{!!item.date && new Date(item.date).toLocaleString()}</small>
         </div>
         <div>{item.notes}</div>
