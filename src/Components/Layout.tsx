@@ -58,6 +58,7 @@ export function Layout() {
                     <MenuItem component={NavLink} to={'/map'} onClick={handleClose}>All Addresses</MenuItem>
                     <MenuItem component={NavLink} to={'/groups'} onClick={handleClose}>Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/groups/edit'} onClick={handleClose}>Edit Groups</MenuItem>
+                    <MenuItem component={NavLink} to={'/addresses'} onClick={handleClose}>Address Table</MenuItem>
                     {isAdmin && <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>}
                     {isAdmin && <MenuItem component={NavLink} to={'/users'} onClick={handleClose}>Users</MenuItem>}
                     <MenuItem onClick={()=>netlifyIdentity.logout()}>Log Out</MenuItem>

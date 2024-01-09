@@ -8,6 +8,7 @@ import {Layout} from "./Components/Layout.tsx";
 import netlifyIdentity from 'netlify-identity-widget'
 import {LoginPage} from "./Pages/LoginPage.tsx";
 import {UsersListPage} from "./Pages/UsersListPage.tsx";
+import {AddressListPage} from "./Pages/AddressListPage.tsx";
 
 function App() {
     const user = netlifyIdentity.currentUser()
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/map/:groupId" element={<MapViewPage/>}/>
                     <Route path={"/groups"} element={<GroupListPage/>}/>
                     <Route path="/groups/edit" element={<GroupEditPage/>}/>
+                    <Route path={"/addresses"} element={<AddressListPage/>}/>
                     <Route path="/settings" element={<SettingsPage/>}/>
                     <Route path="/users" element={<UsersListPage/>}/>
                     <Route path={"*"} element={<Navigate to={"/map"}/>}/>
