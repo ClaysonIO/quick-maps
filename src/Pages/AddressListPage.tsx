@@ -9,7 +9,7 @@ import {Add} from "@mui/icons-material";
 export function AddressListPage(){
     const {addresses, addVisit} = useAddresses();
     const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
-    const {getName} = useVisitResolutions();
+    const {getName, visitResolutions} = useVisitResolutions();
 
     const columns: GridColDef<IAddress>[] = [
         {field: 'actions', width: 40, type: 'actions', getActions: ({row}) => [
@@ -18,7 +18,12 @@ export function AddressListPage(){
         { field: 'names', headerName: 'Name', flex: 2, valueGetter: ({row})=>row.names.join(', ')},
         { field: 'address', headerName: 'Address', flex: 1, renderCell: ({row})=> <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(row.address)}`} target={'_blank'}>{row.address}</a>},
         { field: 'groupId', headerName: 'Group'},
-        { field: 'status', headerName: 'Status', valueGetter: ({row})=>getName(row.status)},
+        {
+            field: 'status',
+            headerName: 'Status',
+            type: 'singleSelect',
+            valueOptions: visitResolutions.map(x=>x.name),
+            valueGetter: ({row})=>getName(row.status)},
     ]
 
     return (<div style={{padding: '2em'}}>
