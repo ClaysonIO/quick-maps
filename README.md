@@ -12,3 +12,10 @@ This is a Netlify application, and uses netlify functions. It requires the follo
 | `MONGO_DATA_SOURCE` | The Data Source value from MongoDB Atlas |
 | `MONGO_DATA_API_APP_ID` | The Data API App ID from MongoDB Atlas   |
 | `MONGO_API_KEY` | The API Key for MongoDB Atlas           |
+
+## Attributions
+
+
+Favicon: 
+
+[Location icons created by IconMarketPK - Flaticon](https://www.flaticon.com/free-icons/location)
