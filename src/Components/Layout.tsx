@@ -128,7 +128,7 @@ export function Layout() {
                                 onChange={() => toggleFilter(resolution.id)}
                                 label={resolution.name}
                             />
-<div style={{flexGrow: 1}}/>
+                            <div style={{flexGrow: 1}}/>
                             <div>({filterCount(resolution.id)})</div>
                             <div className={`my-div-icon ${resolution.id}`}/>
                         </MenuItem>))}
