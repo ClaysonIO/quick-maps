@@ -1,15 +1,21 @@
-import React from 'react';
-import {DataGrid, GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
+import React, {useMemo} from 'react';
+import {DataGrid, GridActionsCellItem, GridColDef, GridToolbarContainer, GridToolbarExport} from "@mui/x-data-grid";
 import {useAddresses} from "../Hooks/useAddresses.ts";
 import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
 import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
 import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import {Add} from "@mui/icons-material";
+import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 
 export function AddressListPage(){
-    const {addresses, addVisit} = useAddresses();
+    const {addresses: rawAddresses, addVisit} = useAddresses();
     const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
+    const {filters} = useResolutionFilters();
     const {getName, visitResolutions} = useVisitResolutions();
+
+    const addresses = useMemo(()=>{
+        return rawAddresses.filter(address => filters.includes(address.status));
+    }, [rawAddresses, filters])
 
     const columns: GridColDef<IAddress>[] = [
         {field: 'actions', width: 40, type: 'actions', getActions: ({row}) => [
@@ -29,6 +35,7 @@ export function AddressListPage(){
     return (<div style={{padding: '2em'}}>
 
             <DataGrid
+                slots={{toolbar: CustomToolbar}}
                 density={'compact'}
                 getRowId={x=>x._id}
                 columns={columns}
@@ -43,4 +50,12 @@ export function AddressListPage(){
             />}
     </div>
     )
+}
+
+function CustomToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarExport />
+        </GridToolbarContainer>
+    );
 }
