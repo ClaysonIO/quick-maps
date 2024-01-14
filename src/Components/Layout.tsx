@@ -18,7 +18,7 @@ export function Layout() {
     const [filterAnchorEl, setFilterAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const {visitResolutions} = useVisitResolutions();
-    const {filters, toggleFilter, filterStatus} = useResolutionFilters();
+    const {filterCount, toggleFilter, filterStatus} = useResolutionFilters();
     const {error, loading} = useAddresses();
     const {isAdmin} = useUsers()
 
@@ -121,15 +121,16 @@ export function Layout() {
                     onClose={handleFilterClose}
                 >
                     {visitResolutions.map((resolution) => (
-                        <MenuItem key={resolution.id} onClick={() => {
-                            // handleFilterClose()
-                        }}>
+                        <MenuItem key={resolution.id} sx={{gap: '0.5em'}}>
                             <FormControlLabel
                                 control={<Checkbox/>}
                                 checked={filterStatus(resolution.id)}
                                 onChange={() => toggleFilter(resolution.id)}
                                 label={resolution.name}
                             />
+<div style={{flexGrow: 1}}/>
+                            <div>({filterCount(resolution.id)})</div>
+                            <div className={`my-div-icon ${resolution.id}`}/>
                         </MenuItem>))}
                 </Menu>
             </AppBar>
