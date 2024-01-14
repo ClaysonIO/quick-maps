@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {MapContainer} from 'react-leaflet/MapContainer'
 import {TileLayer} from 'react-leaflet/TileLayer'
 import 'leaflet/dist/leaflet.css'
@@ -8,11 +8,17 @@ import L from 'leaflet';
 import {useParams} from "react-router";
 import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
 import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
+import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 
-export function MapViewPage() {
+export function AddressMapPage() {
     const {groupId} = useParams() as { groupId: string };
 
-    const {addresses, addVisit} = useAddresses(groupId);
+    const {addresses: rawAddresses, addVisit} = useAddresses(groupId);
+    const {filters} = useResolutionFilters();
+
+    const addresses = useMemo(()=>{
+      return rawAddresses.filter(address => filters.includes(address.status));
+    }, [rawAddresses, filters])
 
     const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
 

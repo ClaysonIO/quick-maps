@@ -1,15 +1,21 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {DataGrid, GridActionsCellItem, GridColDef} from "@mui/x-data-grid";
 import {useAddresses} from "../Hooks/useAddresses.ts";
 import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
 import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
 import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import {Add} from "@mui/icons-material";
+import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 
 export function AddressListPage(){
-    const {addresses, addVisit} = useAddresses();
+    const {addresses: rawAddresses, addVisit} = useAddresses();
     const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
+    const {filters} = useResolutionFilters();
     const {getName, visitResolutions} = useVisitResolutions();
+
+    const addresses = useMemo(()=>{
+        return rawAddresses.filter(address => filters.includes(address.status));
+    }, [rawAddresses, filters])
 
     const columns: GridColDef<IAddress>[] = [
         {field: 'actions', width: 40, type: 'actions', getActions: ({row}) => [

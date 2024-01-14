@@ -1,6 +1,6 @@
 import {Outlet} from "react-router";
 import {NavLink} from "react-router-dom";
-import {AppBar, Box, IconButton, Toolbar, Typography, MenuItem, Menu} from "@mui/material";
+import {AppBar, Box, IconButton, Toolbar, Typography, MenuItem, Menu, Checkbox, FormControlLabel} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
 import netlifyIdentity from 'netlify-identity-widget'
@@ -8,12 +8,17 @@ import {useUsers} from "../Hooks/useUsers.ts";
 import {LoadingIndicator} from "./LoadingIndicator.tsx";
 import {ErrorBar} from "./ErrorBar.tsx";
 import {useAddresses} from "../Hooks/useAddresses.ts";
-
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
+import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 
 export function Layout() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [filterAnchorEl, setFilterAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const { error, loading} = useAddresses();
+    const {visitResolutions} = useVisitResolutions();
+    const {filters, toggleFilter, filterStatus} = useResolutionFilters();
+    const {error, loading} = useAddresses();
     const {isAdmin} = useUsers()
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -22,6 +27,13 @@ export function Layout() {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+    const handleFilterMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setFilterAnchorEl(event.currentTarget);
+    };
+
+    const handleFilterClose = () => {
+        setFilterAnchorEl(null);
     };
 
     return <div style={{display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw'}}>
@@ -41,6 +53,17 @@ export function Layout() {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         Quick Maps
                     </Typography>
+                    <div style={{flexGrow: 1}}/>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{mr: 2}}
+                        onClick={handleFilterMenu}
+                    >
+                        <FilterAltIcon/>
+                    </IconButton>
                 </Toolbar>
 
 
@@ -59,13 +82,42 @@ export function Layout() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <MenuItem component={NavLink} to={'/map'} onClick={handleClose}>All Addresses</MenuItem>
+                    <MenuItem component={NavLink} to={'/map'} onClick={handleClose}>Map</MenuItem>
                     <MenuItem component={NavLink} to={'/groups'} onClick={handleClose}>Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/groups/edit'} onClick={handleClose}>Edit Groups</MenuItem>
                     <MenuItem component={NavLink} to={'/addresses'} onClick={handleClose}>Address Table</MenuItem>
-                    {isAdmin && <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>}
+                    {isAdmin &&
+                        <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>}
                     {isAdmin && <MenuItem component={NavLink} to={'/users'} onClick={handleClose}>Users</MenuItem>}
-                    <MenuItem onClick={()=>netlifyIdentity.logout()}>Log Out</MenuItem>
+                    <MenuItem onClick={() => netlifyIdentity.logout()}>Log Out</MenuItem>
+                </Menu>
+
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={filterAnchorEl}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={Boolean(filterAnchorEl)}
+                    onClose={handleFilterClose}
+                >
+                    {visitResolutions.map((resolution) => (
+                        <MenuItem key={resolution.id} onClick={() => {
+                            // handleFilterClose()
+                        }}>
+                            <FormControlLabel
+                                control={<Checkbox/>}
+                                checked={filterStatus(resolution.id)}
+                                onChange={() => toggleFilter(resolution.id)}
+                                label={resolution.name}
+                            />
+                        </MenuItem>))}
                 </Menu>
             </AppBar>
         </Box>
