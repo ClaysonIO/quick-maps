@@ -1,6 +1,17 @@
 import {Outlet} from "react-router";
 import {NavLink} from "react-router-dom";
-import {AppBar, Box, IconButton, Toolbar, Typography, MenuItem, Menu, Checkbox, FormControlLabel} from "@mui/material";
+import {
+    AppBar,
+    Box,
+    IconButton,
+    Toolbar,
+    Typography,
+    MenuItem,
+    Menu,
+    Checkbox,
+    FormControlLabel,
+    Avatar
+} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
 import netlifyIdentity from 'netlify-identity-widget'
@@ -12,8 +23,11 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
+import {useUser} from "../Hooks/useUser.ts";
 
 export function Layout() {
+    const {user, logout} = useUser();
+    const [userAnchorEl, setUserAnchorEl] = React.useState<null | HTMLElement>(null);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [filterAnchorEl, setFilterAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -22,6 +36,13 @@ export function Layout() {
     const {error, loading} = useAddresses();
     const {isAdmin} = useUsers()
 
+    const handleUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setUserAnchorEl(event.currentTarget);
+    };
+
+    const handleUserClose = () => {
+        setUserAnchorEl(null);
+    };
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -77,6 +98,17 @@ export function Layout() {
                     >
                         <GitHubIcon/>
                     </IconButton>
+
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{mr: 2}}
+                        onClick={handleUserMenu}
+                    >
+                    <Avatar alt={user?.name} src={user?.picture} />
+                    </IconButton>
                 </Toolbar>
 
 
@@ -102,7 +134,23 @@ export function Layout() {
                     {isAdmin &&
                         <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>}
                     {isAdmin && <MenuItem component={NavLink} to={'/users'} onClick={handleClose}>Users</MenuItem>}
-                    <MenuItem onClick={() => netlifyIdentity.logout()}>Log Out</MenuItem>
+                </Menu>
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={userAnchorEl}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    open={Boolean(userAnchorEl)}
+                    onClose={handleUserClose}
+                >
+                    <MenuItem onClick={() => {logout(); window.location.reload()}}>Log Out</MenuItem>
                 </Menu>
 
                 <Menu
