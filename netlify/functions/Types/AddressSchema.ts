@@ -8,7 +8,8 @@ export const visitResolutionSchema = z.union([
     z.literal("no-access"),
     z.literal("moved"),
     z.literal("deceased"),
-    z.literal("other")
+    z.literal("other"),
+    z.literal("moved-to-list")
 ])
 
 export const AddressVisitSchema = z.object({

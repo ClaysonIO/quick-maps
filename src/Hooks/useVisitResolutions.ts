@@ -9,6 +9,7 @@ export function useVisitResolutions(){
         {name: 'Moved', id: 'moved', color: '#ff0000'},
         {name: 'Deceased', id: 'deceased', color: '#000000'},
         {name: 'Other', id: 'other', color: '#FFFFFF'},
+        {name: 'Moved to List', id: 'moved-to-list', color: '#FFFFFF'},
     ]
     
     function getName(id: VisitResolution){
@@ -21,6 +22,7 @@ export function useVisitResolutions(){
             case 'moved': return 'Moved';
             case 'deceased': return 'Deceased';
             case 'other': return 'Other';
+            case 'moved-to-list': return 'Moved to List';
             default: return "Not Valid";
         }
     }
