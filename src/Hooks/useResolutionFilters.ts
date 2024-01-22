@@ -1,11 +1,13 @@
 import {useVisitResolutions} from "./useVisitResolutions.ts";
 import {useLocalStorage} from "usehooks-ts";
 import {useAddresses} from "./useAddresses.ts";
+import {useParams} from "react-router";
 
 export function useResolutionFilters(){
 
+    const {projectId} = useParams() as {projectId: string};
     const {visitResolutions} = useVisitResolutions();
-    const {addresses} = useAddresses();
+    const {data: addresses} = useAddresses({projectId});
 
     const [filters, setFilters] = useLocalStorage<string[]>('filters', visitResolutions.map(({id})=>id));
 

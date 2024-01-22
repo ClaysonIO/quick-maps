@@ -13,9 +13,11 @@ import {
     TextField
 } from "@mui/material";
 import {useGroups} from "../Hooks/useGroups.ts";
-import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
+import {IAddress} from "../Interfaces/AddressSchema.ts";
+import {useParams} from "react-router";
 
 export function GroupEditPage() {
+    const {projectId} = useParams() as {projectId: string};
 
     const [selected, setSelected] = useState<string[]>([])
 
@@ -29,7 +31,7 @@ export function GroupEditPage() {
         return L.divIcon({className: 'my-div-icon pending'})
     }
 
-    const {addresses, setAddresses} = useAddresses();
+    const {data: addresses, updateAll: setAddresses} = useAddresses({projectId});
     const {groups} = useGroups();
 
     function setAddressGroups(groupId: string){
@@ -40,7 +42,6 @@ export function GroupEditPage() {
             }
             return x;
         });
-        setAddresses(selectedAddresses);
         setSelected([]);
     }
 

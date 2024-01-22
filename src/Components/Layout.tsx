@@ -14,18 +14,17 @@ import {
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
-import netlifyIdentity from 'netlify-identity-widget'
 import {useUsers} from "../Hooks/useUsers.ts";
-import {LoadingIndicator} from "./LoadingIndicator.tsx";
 import {ErrorBar} from "./ErrorBar.tsx";
-import {useAddresses} from "../Hooks/useAddresses.ts";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useUser} from "../Hooks/useUser.ts";
+import {useErrors} from "../Hooks/useErrors.ts";
 
 export function Layout() {
+    const {errors} = useErrors()
     const {user, logout} = useUser();
     const [userAnchorEl, setUserAnchorEl] = React.useState<null | HTMLElement>(null);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -33,7 +32,6 @@ export function Layout() {
 
     const {visitResolutions} = useVisitResolutions();
     const {filterCount, toggleFilter, filterStatus} = useResolutionFilters();
-    const {error, loading} = useAddresses();
     const {isAdmin} = useUsers()
 
     const handleUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -186,7 +184,6 @@ export function Layout() {
         <div style={{flex: 1}}>
             <Outlet/>
         </div>
-        <LoadingIndicator loading={loading}/>
-        <ErrorBar error={error}/>
+        {errors.map((error, index)=>(<ErrorBar key={index} error={error}/>))}
     </div>
 }

@@ -1,14 +1,16 @@
 import React, {useMemo} from 'react';
 import {DataGrid, GridActionsCellItem, GridColDef, GridToolbarContainer, GridToolbarExport} from "@mui/x-data-grid";
 import {useAddresses} from "../Hooks/useAddresses.ts";
-import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
+import {IAddress} from "../Interfaces/AddressSchema.ts";
 import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
 import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import {Add} from "@mui/icons-material";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
+import {useParams} from "react-router";
 
 export function AddressListPage(){
-    const {addresses: rawAddresses, addVisit} = useAddresses();
+    const {projectId} = useParams() as {projectId: string};
+    const {data: rawAddresses} = useAddresses({projectId});
     const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
     const {filters} = useResolutionFilters();
     const {getName, visitResolutions} = useVisitResolutions();

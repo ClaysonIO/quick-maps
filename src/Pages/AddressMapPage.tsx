@@ -7,13 +7,13 @@ import {Marker} from "react-leaflet";
 import L from 'leaflet';
 import {useParams} from "react-router";
 import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
-import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
+import {IAddress} from "../Interfaces/AddressSchema.ts";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 
 export function AddressMapPage() {
-    const {groupId} = useParams() as { groupId: string };
+    const {groupId, projectId} = useParams() as {projectId: string, groupId: string };
 
-    const {addresses: rawAddresses, addVisit} = useAddresses(groupId);
+    const {data: rawAddresses} = useAddresses({projectId, groupId});
     const {filters} = useResolutionFilters();
 
     const addresses = useMemo(()=>{

@@ -9,6 +9,9 @@ import {LoginPage} from "./Pages/LoginPage.tsx";
 import {UsersListPage} from "./Pages/UsersListPage.tsx";
 import {AddressListPage} from "./Pages/AddressListPage.tsx";
 import {useUser} from "./Hooks/useUser.ts";
+import {ProjectCreatePage} from "./Pages/ProjectCreatePage.tsx";
+import {ProjectListPage} from "./Pages/ProjectListPage.tsx";
+import {AddressesAddPage} from "./Pages/AddressesAddPage.tsx";
 
 function App() {
     const {user} = useUser();
@@ -18,15 +21,17 @@ function App() {
             {user ?
             <Routes>
                 <Route element={<Layout/>}>
-                    <Route path="/" element={<AddressMapPage/>}/>
-                    <Route path="/map" element={<AddressMapPage/>}/>
-                    <Route path="/map/:groupId" element={<AddressMapPage/>}/>
-                    <Route path={"/groups"} element={<GroupListPage/>}/>
-                    <Route path="/groups/edit" element={<GroupEditPage/>}/>
-                    <Route path={"/addresses"} element={<AddressListPage/>}/>
-                    <Route path="/settings" element={<SettingsPage/>}/>
-                    <Route path="/users" element={<UsersListPage/>}/>
-                    <Route path={"*"} element={<Navigate to={"/map"}/>}/>
+                    <Route path={"/projects"} element={<ProjectListPage/>}/>
+                    <Route path={"/projects/create"} element={<ProjectCreatePage/>}/>
+                    <Route path={"/projects/:projectId/map"} element={<AddressMapPage/>}/>
+                    <Route path={"/projects/:projectId/map/:groupId"} element={<AddressMapPage/>}/>
+                    <Route path={"/projects/:projectId/groups"} element={<GroupListPage/>}/>
+                    <Route path={"/projects/:projectId/groups/edit"} element={<GroupEditPage/>}/>
+                    <Route path={"/projects/:projectId/addresses"} element={<AddressListPage/>}/>
+                    <Route path={"/projects/:projectId/addresses/add"} element={<AddressesAddPage/>}/>
+                    <Route path={"/projects/:projectId/settings"} element={<SettingsPage/>}/>
+                    <Route path={"/projects/:projectId/users"} element={<UsersListPage/>}/>
+                    <Route path={"*"} element={<Navigate to={"/projects"}/>}/>
                 </Route>
             </Routes>
                 : <LoginPage/>}

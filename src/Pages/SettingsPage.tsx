@@ -3,13 +3,15 @@ import XLSX from "xlsx";
 import {Button, TextField} from "@mui/material";
 import netlifyIdentity from "netlify-identity-widget";
 import {useAddresses} from "../Hooks/useAddresses.ts";
-import {IAddress} from "../../netlify/functions/Types/AddressSchema.ts";
+import {IAddress} from "../Interfaces/AddressSchema.ts";
+import {useParams} from "react-router";
 
 export function SettingsPage() {
+    const {projectId} = useParams() as {projectId: string};
     const fileRef = React.useRef<HTMLInputElement>(null);
     const nameFileRef = React.useRef<HTMLInputElement>(null);
 
-    const {addresses, setAddresses} = useAddresses();
+    const {data: addresses, updateAll: setAddresses} = useAddresses({projectId});
     const uploadAddresses = async (e: any) => {
         const f = e.target.files?.[0];
 
