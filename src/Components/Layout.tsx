@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
-import {useUsers} from "../Hooks/useUsers.ts";
 import {ErrorBar} from "./ErrorBar.tsx";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -35,7 +34,6 @@ export function Layout() {
     const {data: resolutionTypes} = useResolutionTypes({projectId});
 
     const {filterCount, toggleFilter, filterStatus} = useResolutionFilters();
-    const {isAdmin} = useUsers()
 
     const handleUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setUserAnchorEl(event.currentTarget);
@@ -62,7 +60,7 @@ export function Layout() {
     return <div style={{display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw'}}>
         <Box>
             <AppBar position="static" sx={{backgroundColor: 'rgb(21, 116, 147)'}}>
-                <Toolbar>
+                <Toolbar >
                     <IconButton
                         size="large"
                         edge="start"
@@ -132,9 +130,6 @@ export function Layout() {
                     <MenuItem component={NavLink} to={'/projects'} onClick={handleClose}>Projects</MenuItem>
                     <MenuItem disabled={!projectId} component={NavLink} to={`/projects/${projectId}/map`} onClick={handleClose}>Map</MenuItem>
                     <MenuItem disabled={!projectId} component={NavLink} to={`/projects/${projectId}/addresses`} onClick={handleClose}>Address Table</MenuItem>
-                    {isAdmin &&
-                        <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>}
-                    {isAdmin && <MenuItem component={NavLink} to={'/users'} onClick={handleClose}>Users</MenuItem>}
                 </Menu>
                 <Menu
                     id="menu-appbar"

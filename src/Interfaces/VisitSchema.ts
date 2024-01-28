@@ -6,7 +6,7 @@ export const VisitSchema = z.object({
     dateTime: z.coerce.date(),
     resolutionId: z.string(),
     email: z.string(),
-    notes: z.string()
+    notes: z.string().optional()
 });
 
 export type IVisit = z.infer<typeof VisitSchema>

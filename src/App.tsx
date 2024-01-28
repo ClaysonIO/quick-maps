@@ -6,7 +6,6 @@ import {SettingsPage} from "./Pages/SettingsPage.tsx";
 import {GroupListPage} from "./Pages/GroupListPage.tsx";
 import {Layout} from "./Components/Layout.tsx";
 import {LoginPage} from "./Pages/LoginPage.tsx";
-import {UsersListPage} from "./Pages/UsersListPage.tsx";
 import {AddressListPage} from "./Pages/AddressListPage.tsx";
 import {useUser} from "./Hooks/useUser.ts";
 import {ProjectCreatePage} from "./Pages/ProjectCreatePage.tsx";
@@ -30,7 +29,6 @@ function App() {
                     <Route path={"/projects/:projectId/addresses"} element={<AddressListPage/>}/>
                     <Route path={"/projects/:projectId/addresses/add"} element={<AddressesAddPage/>}/>
                     <Route path={"/projects/:projectId/settings"} element={<SettingsPage/>}/>
-                    <Route path={"/projects/:projectId/users"} element={<UsersListPage/>}/>
                     <Route path={"*"} element={<Navigate to={"/projects"}/>}/>
                 </Route>
             </Routes>

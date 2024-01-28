@@ -24,6 +24,9 @@ export function AddressMapPage() {
         //Get the center of the addresses
         const latitudes = mergedAddresses.map(x=>x.geocode?.latitude).filter(x=>x) as number[];
         const longitudes = mergedAddresses.map(x=>x.geocode?.longitude).filter(x=>x) as number[];
+
+        if(!latitudes.length || !longitudes.length) return {center: [0,0], bounds: [[0,0], [0,0]]}
+
         const minLat = Math.min(...latitudes);
         const maxLat = Math.max(...latitudes);
         const minLng = Math.min(...longitudes);
@@ -36,8 +39,8 @@ export function AddressMapPage() {
     }, [mergedAddresses])
 
     const [selectedAddress, setSelectedAddress] = React.useState<IMergedAddress | null>(null)
-
-    if(loading || !center[0]) return <div>Loading...</div>
+console.log(center, bounds)
+    // if(loading || !center[0]) return <div>Loading...</div>
 
     return (
         <>
@@ -59,7 +62,10 @@ export function AddressMapPage() {
 
                         key={address.id}
                         position={[address.geocode!.latitude, address.geocode!.longitude]}
-                        icon={L.divIcon({className: `my-div-icon ${address.status}`})}
+                        icon={L.divIcon({
+                            className: '',
+                            html: `<div class="my-div-icon" style="background-color: ${address.status?.color}" />`
+                        })}
                         eventHandlers={{
                             click: () => {
                                 setSelectedAddress(address);
@@ -80,9 +86,14 @@ export function AddressMapPage() {
 }
 
 export function FitBounds({bounds}: {bounds: [[number, number], [number, number]]}) {
+    const [initialized, setInitialized] = React.useState(false);
     const map = useMap();
     useEffect(()=>{
-        map.fitBounds(bounds);
-    }, [])
+        if(!initialized && bounds[0][0] !== 0){
+            setInitialized(true);
+            map.fitBounds(bounds);
+            map.flyToBounds(bounds);
+        }
+    }, [bounds])
     return null;
 }

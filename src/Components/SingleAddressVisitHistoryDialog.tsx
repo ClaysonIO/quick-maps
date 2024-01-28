@@ -13,18 +13,18 @@ export const SingleAddressVisitHistoryDialog = ({projectId, mergedAddress, handl
     mergedAddress: IMergedAddress
 }) => {
     const {addMultiple: addVisits} = useVisits({projectId});
-    const {data: options} = useResolutionTypes({projectId});
+    const {data: resolutionTypes} = useResolutionTypes({projectId});
     const {user} = useUser();
 
     const [notes, setNotes] = React.useState('')
     const [value, setValue] = React.useState<IResolutionType | undefined>()
 
-    function saveChanges() {
+    function recordVisit() {
         if (value) {
             addVisits.mutateAsync([{
                 id: crypto.randomUUID(),
                 resolutionId: value.id,
-                notes,
+                notes: notes ?? "",
                 dateTime: new Date(),
                 address: mergedAddress.address,
                 email: user.email
@@ -53,7 +53,7 @@ export const SingleAddressVisitHistoryDialog = ({projectId, mergedAddress, handl
                         />)}
                         getOptionKey={(option) => option.id}
                         getOptionLabel={(option) => option.name}
-                        options={options}
+                        options={resolutionTypes}
                         value={value}
                         onChange={(event, newValue) => {
                             if (newValue) {
@@ -61,14 +61,18 @@ export const SingleAddressVisitHistoryDialog = ({projectId, mergedAddress, handl
                             }
                         }}
                     />
-                    <Button disabled={!value} onClick={saveChanges}>Save</Button>
+                    <Button disabled={!value} onClick={recordVisit}>Add Visit</Button>
                 </div>
                 <TextField label={'Notes'} multiline={true} rows={3} value={notes}
                            onChange={(e) => setNotes(e.target.value)}/>
 
                 <h3>History</h3>
                 {mergedAddress.visits
-                    .map((item, index) => <HistoryItem key={index} item={item}/>)}
+                    .map((item) => <HistoryItem
+                        key={item.id}
+                        resolutionTypes={resolutionTypes}
+                        visit={item}
+                    />)}
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => handleClose()}>Cancel</Button>
