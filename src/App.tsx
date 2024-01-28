@@ -1,5 +1,5 @@
 import './App.css'
-import {AddressMapPage} from "./Pages/AddressMapPage.tsx";
+import {MapPage} from "./Pages/MapPage.tsx";
 import {Route, BrowserRouter, Routes, Navigate} from "react-router-dom";
 import {GroupEditPage} from "./Pages/GroupEditPage.tsx";
 import {SettingsPage} from "./Pages/SettingsPage.tsx";
@@ -22,8 +22,8 @@ function App() {
                 <Route element={<Layout/>}>
                     <Route path={"/projects"} element={<ProjectListPage/>}/>
                     <Route path={"/projects/create"} element={<ProjectCreatePage/>}/>
-                    <Route path={"/projects/:projectId/map"} element={<AddressMapPage/>}/>
-                    <Route path={"/projects/:projectId/map/:groupId"} element={<AddressMapPage/>}/>
+                    <Route path={"/projects/:projectId/map"} element={<MapPage/>}/>
+                    <Route path={"/projects/:projectId/map/:groupId"} element={<MapPage/>}/>
                     <Route path={"/projects/:projectId/groups"} element={<GroupListPage/>}/>
                     <Route path={"/projects/:projectId/groups/edit"} element={<GroupEditPage/>}/>
                     <Route path={"/projects/:projectId/addresses"} element={<AddressListPage/>}/>

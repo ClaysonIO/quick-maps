@@ -12,7 +12,7 @@ export function ProjectListPage() {
     const columns: GridColDef<IProject>[] = [
         {field: 'actions', type: 'actions', width: 40, getActions: ({row}) => [
             //@ts-expect-error
-                <GridActionsCellItem component={NavLink} to={`/projects/${row.id}/addresses`} label={'Edit'} icon={<Navigation/>}/>
+                <GridActionsCellItem component={NavLink} to={`/projects/${row.id}/map`} label={'Edit'} icon={<Navigation/>}/>
             ]},
         {field: 'name', headerName: 'Name', flex: 1},
     ]
@@ -23,7 +23,7 @@ export function ProjectListPage() {
             <DataGrid
                 columns={columns}
                 rows={sheets}
-                onRowClick={(params) => {navigate(`/projects/${params.row.id}/addresses`)}}
+                onRowClick={(params) => {navigate(`/projects/${params.row.id}/map`)}}
             />
         </div>
     )

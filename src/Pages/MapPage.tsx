@@ -13,7 +13,7 @@ import {useMergedAddresses} from "../Hooks/useMergedAddresses.ts";
 import {useErrors} from "../Hooks/useErrors.ts";
 import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
 
-export function AddressMapPage() {
+export function MapPage() {
     const {groupId, projectId} = useParams() as {projectId: string, groupId: string };
 
     const {data: mergedAddresses, loading} = useMergedAddresses({projectId, geocodeOnly: true})
