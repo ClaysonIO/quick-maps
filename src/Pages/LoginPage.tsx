@@ -19,10 +19,10 @@ export function LoginPage(){
 
     return <div style={{height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
 
-        <img src={'/location-pin.png'} style={{height: '100px', width: '100px'}}/>
-        <h1>Login using Google</h1>
+        <img src={'/logo-color.svg'} style={{height: '30vh', width: '30vh'}}/>
+        <h1>Visit Tracker</h1>
 
-        <Button onClick={()=>login()}>Login</Button>
+        <Button onClick={()=>login()}>Login with Google</Button>
 
 
     </div>

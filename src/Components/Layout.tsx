@@ -70,6 +70,7 @@ export function Layout() {
                     >
                         <MenuIcon/>
                     </IconButton>
+                    <img alt={'Logo'} src={'/logo-white.svg'} style={{marginRight: '1em', height: '30px', width: '30px', color: 'white', fill: 'white'}}/>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         Visit Tracker
                     </Typography>

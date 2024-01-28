@@ -6,10 +6,10 @@ This is a tool for having a shared map for visiting a large number of people. Ou
 ## Setup
 This is a react SPA with no backend. It can be run in any environment, but requires the following environment variable to connect to a sheet in Google Drive: 
 
-| Variable | Description                                                                                                                                                                                                                                   |
-| -------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Variable                | Description                                                                                                                                                                                                                                   |
+|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `VITE_GOOGLE_CLIENT_ID` | A client ID of a Google application with access to Google Sheets and Google Drive. To set this up, follow the instructions in the [Google Developer Portal](https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid) |
-
+| `VITE_MAPTILER_API_KEY` | An API key for [MapTiler](https://www.maptiler.com/). This is used geocoding.                                                                                                                                                                 |
 
 ## Attributions
 
