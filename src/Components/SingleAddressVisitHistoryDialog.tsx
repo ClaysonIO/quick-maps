@@ -5,6 +5,7 @@ import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
 import {useVisits} from "../Hooks/useVisits.ts";
 import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
 import {IResolutionType} from "../Interfaces/ResolutionTypeSchema.ts";
+import {useUser} from "../Hooks/useUser.ts";
 
 export const SingleAddressVisitHistoryDialog = ({projectId, mergedAddress, handleClose}: {
     projectId: string,
@@ -12,14 +13,22 @@ export const SingleAddressVisitHistoryDialog = ({projectId, mergedAddress, handl
     mergedAddress: IMergedAddress
 }) => {
     const {addMultiple: addVisits} = useVisits({projectId});
-    const {data: options} = useResolutionTypes({projectId})
+    const {data: options} = useResolutionTypes({projectId});
+    const {user} = useUser();
 
     const [notes, setNotes] = React.useState('')
     const [value, setValue] = React.useState<IResolutionType | undefined>()
 
     function saveChanges() {
         if (value) {
-            // addVisit(mergedAddress._id, {status: value.id, notes, date: new Date(), user: ''});
+            addVisits.mutateAsync([{
+                id: crypto.randomUUID(),
+                resolutionId: value.id,
+                notes,
+                dateTime: new Date(),
+                address: mergedAddress.address,
+                email: user.email
+            }])
         }
         handleClose()
     }
