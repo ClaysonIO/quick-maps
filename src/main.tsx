@@ -7,7 +7,14 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 
 netlifyIdentity.init();
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+        },
+    },
+});
 
 netlifyIdentity.on('login', () => {
     window.location.reload();

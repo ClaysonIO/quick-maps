@@ -7,13 +7,15 @@ export function useVisits({projectId}: {projectId: string }) {
         data,
         loading,
         updateAll,
-        updateOne
+        updateOne,
+        addMultiple
     } = useGoogleSheet<IVisit>(projectId, GoogleSheets.SYSTEM_Visits)
 
     return {
         data: data.map(x=>(VisitSchema.parse(x))),
         loading,
         updateAll,
-        updateOne
+        updateOne,
+        addMultiple
     }
 }

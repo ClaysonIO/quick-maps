@@ -17,8 +17,7 @@ export function AddressListPage(){
         .filter(x=>!x.geocode?.latitude),
         [mergedAddresses])
     function generateMissingGeocodes(){
-        generateGeocodesFromAddresses(missingGeoCodes);
-
+        generateGeocodesFromAddresses(missingGeoCodes.map(x=>x.address));
     }
 
     const columns: GridColDef<IMergedAddress>[] = [

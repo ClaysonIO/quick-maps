@@ -1,23 +1,25 @@
-import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import React from "react";
 import {Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import {HistoryItem} from "./HistoryItem.tsx";
-import {IAddress, IAddressVisit, VisitResolution} from "../../netlify/functions/Types/AddressSchema.ts";
+import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
+import {useVisits} from "../Hooks/useVisits.ts";
+import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
+import {IResolutionType} from "../Interfaces/ResolutionTypeSchema.ts";
 
-export const MapIconStatusDialog = ({address, addVisit, handleClose}: {
+export const SingleAddressVisitHistoryDialog = ({projectId, mergedAddress, handleClose}: {
+    projectId: string,
     handleClose: () => void,
-    address: IAddress,
-    addVisit: (_id: string, newHistory: IAddressVisit) => void
+    mergedAddress: IMergedAddress
 }) => {
-
-    const {visitResolutions: options} = useVisitResolutions();
+    const {addMultiple: addVisits} = useVisits({projectId});
+    const {data: options} = useResolutionTypes({projectId})
 
     const [notes, setNotes] = React.useState('')
-    const [value, setValue] = React.useState<{ name: string, id: VisitResolution } | undefined>()
+    const [value, setValue] = React.useState<IResolutionType | undefined>()
 
     function saveChanges() {
         if (value) {
-            addVisit(address._id, {status: value.id, notes, date: new Date(), user: ''});
+            // addVisit(mergedAddress._id, {status: value.id, notes, date: new Date(), user: ''});
         }
         handleClose()
     }
@@ -27,9 +29,9 @@ export const MapIconStatusDialog = ({address, addVisit, handleClose}: {
         <Dialog fullWidth open={true} onClose={() => handleClose()}>
             <DialogTitle>Record a Visit</DialogTitle>
             <DialogContent sx={{display: 'flex', flexDirection: 'column', gap: '1em'}}>
-                {address.names?.map((name, index) => <div key={index}>{name}</div>)}
+                {mergedAddress.occupants?.map((occupant) => <div key={occupant.id}>{occupant.name}</div>)}
 
-                <a href={`https://www.google.com/maps/search/?api=1&query=${address.address}`} target={'_blank'}>{address.address}</a>
+                <a href={`https://www.google.com/maps/search/?api=1&query=${mergedAddress.address}`} target={'_blank'}>{mergedAddress.address}</a>
 
                 <div style={{display: 'flex', gap: '1em'}}>
 
@@ -56,7 +58,8 @@ export const MapIconStatusDialog = ({address, addVisit, handleClose}: {
                            onChange={(e) => setNotes(e.target.value)}/>
 
                 <h3>History</h3>
-                {address.history.sort((a,b)=>new Date(b.date).getTime() - new Date(a.date).getTime()).map((item, index) => <HistoryItem key={index} item={item}/>)}
+                {mergedAddress.visits
+                    .map((item, index) => <HistoryItem key={index} item={item}/>)}
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => handleClose()}>Cancel</Button>

@@ -6,11 +6,12 @@ import {useAddresses} from "../Hooks/useAddresses.ts";
 import {Marker, useMap} from "react-leaflet";
 import L from 'leaflet';
 import {useParams} from "react-router";
-import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
+import {SingleAddressVisitHistoryDialog} from "../Components/SingleAddressVisitHistoryDialog.tsx";
 import {IAddress} from "../Interfaces/AddressSchema.ts";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useMergedAddresses} from "../Hooks/useMergedAddresses.ts";
 import {useErrors} from "../Hooks/useErrors.ts";
+import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
 
 export function AddressMapPage() {
     const {groupId, projectId} = useParams() as {projectId: string, groupId: string };
@@ -34,7 +35,7 @@ export function AddressMapPage() {
     }
     }, [mergedAddresses])
 
-    const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
+    const [selectedAddress, setSelectedAddress] = React.useState<IMergedAddress | null>(null)
 
     if(loading || !center[0]) return <div>Loading...</div>
 
@@ -61,7 +62,7 @@ export function AddressMapPage() {
                         icon={L.divIcon({className: `my-div-icon ${address.status}`})}
                         eventHandlers={{
                             click: () => {
-                                // setSelectedAddress(address);
+                                setSelectedAddress(address);
                             }
                         }}
                     />
@@ -69,9 +70,9 @@ export function AddressMapPage() {
 
             </MapContainer>
 
-            {selectedAddress && <MapIconStatusDialog
-                address={selectedAddress}
-                addVisit={addVisit}
+            {selectedAddress && <SingleAddressVisitHistoryDialog
+                projectId={projectId}
+                mergedAddress={selectedAddress}
                 handleClose={() => setSelectedAddress(null)}
             />}
         </>

@@ -18,10 +18,10 @@ import {useUsers} from "../Hooks/useUsers.ts";
 import {ErrorBar} from "./ErrorBar.tsx";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useUser} from "../Hooks/useUser.ts";
 import {useErrors} from "../Hooks/useErrors.ts";
+import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
 
 export function Layout() {
     const {projectId} = useParams<{projectId: string}>()
@@ -31,7 +31,9 @@ export function Layout() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [filterAnchorEl, setFilterAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const {visitResolutions} = useVisitResolutions();
+    //@ts-expect-error //TODO: Move this into a component that only renders if projectId is set
+    const {data: resolutionTypes} = useResolutionTypes({projectId});
+
     const {filterCount, toggleFilter, filterStatus} = useResolutionFilters();
     const {isAdmin} = useUsers()
 
@@ -167,7 +169,7 @@ export function Layout() {
                     open={Boolean(filterAnchorEl)}
                     onClose={handleFilterClose}
                 >
-                    {visitResolutions.map((resolution) => (
+                    {resolutionTypes.map((resolution) => (
                         <MenuItem key={resolution.id} sx={{gap: '0.5em'}}>
                             <FormControlLabel
                                 control={<Checkbox/>}
