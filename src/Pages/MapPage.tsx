@@ -10,22 +10,22 @@ import {SingleAddressVisitHistoryDialog} from "../Components/SingleAddressVisitH
 import {IAddress} from "../Interfaces/AddressSchema.ts";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useMergedAddresses} from "../Hooks/useMergedAddresses.ts";
-import {useErrors} from "../Hooks/useErrors.ts";
 import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
+import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
 
 export function MapPage() {
-    const {groupId, projectId} = useParams() as {projectId: string, groupId: string };
+    const {groupId, projectId} = useParams() as { projectId: string, groupId: string };
 
+    const {data: resolutionTypes} = useResolutionTypes({projectId});
     const {data: mergedAddresses, loading} = useMergedAddresses({projectId, geocodeOnly: true})
-    const {data: rawAddresses} = useAddresses({projectId, groupId});
     const {filters} = useResolutionFilters();
 
-    const {center, bounds}: {bounds: [[number, number], [number, number]], center: [number, number]} = useMemo(()=>{
+    const {center, bounds}: { bounds: [[number, number], [number, number]], center: [number, number] } = useMemo(() => {
         //Get the center of the addresses
-        const latitudes = mergedAddresses.map(x=>x.geocode?.latitude).filter(x=>x) as number[];
-        const longitudes = mergedAddresses.map(x=>x.geocode?.longitude).filter(x=>x) as number[];
+        const latitudes = mergedAddresses.map(x => x.geocode?.latitude).filter(x => x) as number[];
+        const longitudes = mergedAddresses.map(x => x.geocode?.longitude).filter(x => x) as number[];
 
-        if(!latitudes.length || !longitudes.length) return {center: [0,0], bounds: [[0,0], [0,0]]}
+        if (!latitudes.length || !longitudes.length) return {center: [0, 0], bounds: [[0, 0], [0, 0]]}
 
         const minLat = Math.min(...latitudes);
         const maxLat = Math.max(...latitudes);
@@ -33,14 +33,18 @@ export function MapPage() {
         const maxLng = Math.max(...longitudes);
 
         return {
-            center: [(minLat + maxLat) / 2,(minLng + maxLng) / 2],
+            center: [(minLat + maxLat) / 2, (minLng + maxLng) / 2],
             bounds: [[minLat, minLng], [maxLat, maxLng]]
-    }
+        }
     }, [mergedAddresses])
 
     const [selectedAddress, setSelectedAddress] = React.useState<IMergedAddress | null>(null)
-console.log(center, bounds)
-    // if(loading || !center[0]) return <div>Loading...</div>
+
+    const filteredAddresses = useMemo(() => mergedAddresses
+        .filter((address) => {
+            if (!filters.length || filters.length === resolutionTypes.length) return true;
+            return !!address.status && filters.includes(address.status.id)
+        }), [filters, mergedAddresses]);
 
     return (
         <>
@@ -51,13 +55,13 @@ console.log(center, bounds)
                 style={{height: '100%', width: '100%'}}
                 bounds={bounds}
             >
-                <FitBounds bounds={bounds} />
+                <FitBounds bounds={bounds}/>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
-                {mergedAddresses.map((address) => (
+                {filteredAddresses.map((address) => (
                     <Marker
 
                         key={address.id}
@@ -85,11 +89,11 @@ console.log(center, bounds)
     )
 }
 
-export function FitBounds({bounds}: {bounds: [[number, number], [number, number]]}) {
+export function FitBounds({bounds}: { bounds: [[number, number], [number, number]] }) {
     const [initialized, setInitialized] = React.useState(false);
     const map = useMap();
-    useEffect(()=>{
-        if(!initialized && bounds[0][0] !== 0){
+    useEffect(() => {
+        if (!initialized && bounds[0][0] !== 0) {
             setInitialized(true);
             map.fitBounds(bounds);
             map.flyToBounds(bounds);

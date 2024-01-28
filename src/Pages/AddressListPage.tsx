@@ -7,10 +7,14 @@ import {useGeocodes} from "../Hooks/useGeocodes.ts";
 import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
 import {Box, Button} from '@mui/material';
 import {NavLink} from "react-router-dom";
+import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
+import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
 
 export function AddressListPage(){
     const {projectId} = useParams() as {projectId: string};
     const {data: mergedAddresses} = useMergedAddresses({projectId});
+    const {filters} = useResolutionFilters();
+    const {data: resolutionTypes} = useResolutionTypes({projectId});
     const {generateGeocodesFromAddresses} = useGeocodes({projectId});
 
     const missingGeoCodes = useMemo(()=>mergedAddresses
@@ -35,6 +39,13 @@ export function AddressListPage(){
         {field: 'geocode', headerName: 'Geocode', type: 'boolean', valueGetter: ({row}) => !!row.geocode?.latitude},
     ]
 
+
+    const filteredAddresses = useMemo(() => mergedAddresses
+        .filter((address) => {
+            if (!filters.length || filters.length === resolutionTypes.length) return true;
+            return !!address.status && filters.includes(address.status.id)
+        }), [filters, mergedAddresses]);
+
     return (<div style={{padding: '2em'}}>
 
             <Box style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -45,9 +56,8 @@ export function AddressListPage(){
             <DataGrid
                 slots={{toolbar: CustomToolbar}}
                 density={'compact'}
-                // getRowId={x=>x.id}
                 columns={columns}
-                rows={mergedAddresses}
+                rows={filteredAddresses}
             />
     </div>
     )
