@@ -9,7 +9,7 @@ This is a react SPA with no backend. It can be run in any environment, but requi
 | Variable                | Description                                                                                                                                                                                                                                   |
 |-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `VITE_GOOGLE_CLIENT_ID` | A client ID of a Google application with access to Google Sheets and Google Drive. To set this up, follow the instructions in the [Google Developer Portal](https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid) |
-| `VITE_MAPTILER_API_KEY` | An API key for [MapTiler](https://www.maptiler.com/). This is used geocoding.                                                                                                                                                                 |
+| `VITE_RADAR_API_KEY`    | An API key for [Radar](https://radar.com/). This is used geocoding. Radar offers a generous free tier of 100,000 monthly API calls at no cost, which should be more than enough for any                                                       |
 
 ## Attributions
 

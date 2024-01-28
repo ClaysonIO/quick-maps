@@ -1,22 +1,17 @@
 import {useGoogleSheet} from "./useGoogleSheet.ts";
 import {GoogleSheets} from "./useProjects.ts";
+import {IVisit, VisitSchema} from "../Interfaces/VisitSchema.ts";
 
-export interface IGroup {
-    _id: string;
-    name: string;
-    className: string;
-}
-
-export function useGroups({projectId}: {projectId: string }) {
+export function useVisits({projectId}: {projectId: string }) {
     const {
         data,
         loading,
         updateAll,
         updateOne
-    } = useGoogleSheet<IGroup>(projectId, GoogleSheets.SYSTEM_Groups)
+    } = useGoogleSheet<IVisit>(projectId, GoogleSheets.SYSTEM_Visits)
 
     return {
-        data,
+        data: data.map(x=>(VisitSchema.parse(x))),
         loading,
         updateAll,
         updateOne

@@ -1,4 +1,4 @@
-import {Outlet} from "react-router";
+import {Outlet, useParams} from "react-router";
 import {NavLink} from "react-router-dom";
 import {
     AppBar,
@@ -24,6 +24,7 @@ import {useUser} from "../Hooks/useUser.ts";
 import {useErrors} from "../Hooks/useErrors.ts";
 
 export function Layout() {
+    const {projectId} = useParams<{projectId: string}>()
     const {errors} = useErrors()
     const {user, logout} = useUser();
     const [userAnchorEl, setUserAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -126,10 +127,9 @@ export function Layout() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <MenuItem component={NavLink} to={'/map'} onClick={handleClose}>Map</MenuItem>
-                    <MenuItem component={NavLink} to={'/groups'} onClick={handleClose}>Groups</MenuItem>
-                    <MenuItem component={NavLink} to={'/groups/edit'} onClick={handleClose}>Edit Groups</MenuItem>
-                    <MenuItem component={NavLink} to={'/addresses'} onClick={handleClose}>Address Table</MenuItem>
+                    <MenuItem component={NavLink} to={'/projects'} onClick={handleClose}>Projects</MenuItem>
+                    <MenuItem disabled={!projectId} component={NavLink} to={`/projects/${projectId}/map`} onClick={handleClose}>Map</MenuItem>
+                    <MenuItem disabled={!projectId} component={NavLink} to={`/projects/${projectId}/addresses`} onClick={handleClose}>Address Table</MenuItem>
                     {isAdmin &&
                         <MenuItem component={NavLink} to={'/settings'} onClick={handleClose}>Settings</MenuItem>}
                     {isAdmin && <MenuItem component={NavLink} to={'/users'} onClick={handleClose}>Users</MenuItem>}

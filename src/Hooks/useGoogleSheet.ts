@@ -41,13 +41,13 @@ export function useGoogleSheet<T>(projectId: string, sheetId: string) {
     })
 
     const updateOne = useMutation({
-        mutationFn: async (row: T) => {
+        mutationFn: async (row: T & {id: string}) => {
             if(!credentials) throw new Error("Not logged in")
             const doc = new GoogleSpreadsheet(projectId, {token: credentials.access_token});
             await doc.loadInfo()
             const sheet = doc.sheetsByTitle[sheetId];
-            const rows = await sheet.getRows<T>();
-            const currentRow = rows.find(r=>r.id === row.id);
+            const rows = await sheet.getRows<T & {id: string}>();
+            const currentRow = rows.find(r=>r.get('id') === row.id);
             if(!currentRow) throw new Error("Row not found")
             const updatedRow = Object.assign(currentRow, row);
             await updatedRow.save();
@@ -60,10 +60,28 @@ export function useGoogleSheet<T>(projectId: string, sheetId: string) {
         }
     })
 
+    const addMultiple = useMutation({
+        mutationFn: async (newRows: (T)[]) => {
+            if(!credentials) throw new Error("Not logged in")
+            const doc = new GoogleSpreadsheet(projectId, {token: credentials.access_token});
+            await doc.loadInfo()
+            const sheet = doc.sheetsByTitle[sheetId];
+            const result = await sheet.addRows(newRows as any);
+            console.log("RESULT", result)
+        },
+        onSuccess:()=>{
+            queryClient.invalidateQueries({queryKey: [sheetId]});
+        },
+        onError: (error: any)=>{
+            addError("Error setting data. Try again later. Error: " + error.message ?? "")
+        }
+    })
+
     return {
         loading: isLoading || isFetching,
         data: data ?? [],
         updateAll,
-        updateOne
+        updateOne,
+        addMultiple
     }
 }

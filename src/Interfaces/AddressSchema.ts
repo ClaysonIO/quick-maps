@@ -1,6 +1,6 @@
 import {z} from "zod";
 
-const AddressSchema = z.object({
+export const AddressSchema = z.object({
     id: z.string(),
     address: z.string(),
     name: z.string(),
@@ -8,3 +8,4 @@ const AddressSchema = z.object({
 });
 
 export type IAddress = z.infer<typeof AddressSchema>
+

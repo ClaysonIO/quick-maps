@@ -3,9 +3,17 @@ import {GoogleSpreadsheet} from "google-spreadsheet";
 import {useLocalStorage} from "usehooks-ts";
 import {useState} from "react";
 
-interface IProject {
+export interface IProject {
     id: string;
     name: string;
+}
+
+export enum GoogleSheets{
+    SYSTEM_Addresses = "SYSTEM_Addresses",
+    SYSTEM_Geocodes = "SYSTEM_Geocodes",
+    SYSTEM_Visits = "SYSTEM_Visits",
+    SYSTEM_ResolutionTypes = "SYSTEM_ResolutionTypes",
+    SYSTEM_Groups = "SYSTEM_Groups",
 }
 
 export function useProjects() {
@@ -20,11 +28,11 @@ export function useProjects() {
                 const newDoc = await GoogleSpreadsheet.createNewSpreadsheetDocument({token: credentials.access_token}, {title: name})
                 // Add sheets
                 setStatus('Adding sheets...')
-                const system_addresses = await newDoc.addSheet({title: 'SYSTEM_Addresses'})
-                const system_geocodes = await newDoc.addSheet({title: 'SYSTEM_Geocodes'})
-                const system_visits = await newDoc.addSheet({title: 'SYSTEM_Visits'})
-                const system_resolutionTypes = await newDoc.addSheet({title: 'SYSTEM_ResolutionTypes'})
-                const system_groups = await newDoc.addSheet({title: 'SYSTEM_Groups'})
+                const system_addresses = await newDoc.addSheet({title: GoogleSheets.SYSTEM_Addresses})
+                const system_geocodes = await newDoc.addSheet({title: GoogleSheets.SYSTEM_Geocodes})
+                const system_visits = await newDoc.addSheet({title: GoogleSheets.SYSTEM_Visits})
+                const system_resolutionTypes = await newDoc.addSheet({title: GoogleSheets.SYSTEM_ResolutionTypes})
+                const system_groups = await newDoc.addSheet({title: GoogleSheets.SYSTEM_Groups})
 
                 // Add columns
                 setStatus('Adding headers to sheets...')

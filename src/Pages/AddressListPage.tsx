@@ -1,55 +1,55 @@
 import React, {useMemo} from 'react';
-import {DataGrid, GridActionsCellItem, GridColDef, GridToolbarContainer, GridToolbarExport} from "@mui/x-data-grid";
-import {useAddresses} from "../Hooks/useAddresses.ts";
-import {IAddress} from "../Interfaces/AddressSchema.ts";
-import {MapIconStatusDialog} from "../Components/MapIconStatusDialog.tsx";
-import {useVisitResolutions} from "../Hooks/useVisitResolutions.ts";
-import {Add} from "@mui/icons-material";
-import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
+import {DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport} from "@mui/x-data-grid";
+
 import {useParams} from "react-router";
+import {useMergedAddresses} from "../Hooks/useMergedAddresses.ts";
+import {useGeocodes} from "../Hooks/useGeocodes.ts";
+import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
+import {Box, Button} from '@mui/material';
+import {NavLink} from "react-router-dom";
 
 export function AddressListPage(){
     const {projectId} = useParams() as {projectId: string};
-    const {data: rawAddresses} = useAddresses({projectId});
-    const [selectedAddress, setSelectedAddress] = React.useState<IAddress | null>(null)
-    const {filters} = useResolutionFilters();
-    const {getName, visitResolutions} = useVisitResolutions();
+    const {data: mergedAddresses} = useMergedAddresses({projectId});
+    const {generateGeocodesFromAddresses} = useGeocodes({projectId});
 
-    const addresses = useMemo(()=>{
-        return rawAddresses.filter(address => filters.includes(address.status));
-    }, [rawAddresses, filters])
+    const missingGeoCodes = useMemo(()=>mergedAddresses
+        .filter(x=>!x.geocode?.latitude),
+        [mergedAddresses])
+    function generateMissingGeocodes(){
+        generateGeocodesFromAddresses(missingGeoCodes);
 
-    const columns: GridColDef<IAddress>[] = [
-        {field: 'actions', width: 40, type: 'actions', getActions: ({row}) => [
-            <GridActionsCellItem label={'Edit'} icon={<Add/>} onClick={()=>setSelectedAddress(row)}/>
-            ]},
-        { field: 'names', headerName: 'Name', flex: 2, valueGetter: ({row})=>row.names.join(', ')},
+    }
+
+    const columns: GridColDef<IMergedAddress>[] = [
+        // {field: 'actions', width: 40, type: 'actions', getActions: ({row}) => [
+        //     <GridActionsCellItem label={'Edit'} icon={<Add/>} onClick={()=>setSelectedAddress(row)}/>
+        //     ]},
+        { field: 'occupants', headerName: 'Name', flex: 2, valueGetter: ({row})=>row.occupants.map(x=>x.name).join(', ')},
         { field: 'address', headerName: 'Address', flex: 1, renderCell: ({row})=> <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(row.address)}`} target={'_blank'}>{row.address}</a>},
-        { field: 'groupId', headerName: 'Group'},
         {
             field: 'status',
             headerName: 'Status',
             type: 'singleSelect',
-            valueOptions: visitResolutions.map(x=>x.name),
-            valueGetter: ({row})=>getName(row.status)},
+            valueGetter: ({row}) => row.status?.name
+        },
+        {field: 'geocode', headerName: 'Geocode', type: 'boolean', valueGetter: ({row}) => !!row.geocode?.latitude},
     ]
 
     return (<div style={{padding: '2em'}}>
 
+            <Box style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Button component={NavLink} to={`/projects/${projectId}/addresses/add`}>Add Addresses</Button>
+                <Button disabled={!missingGeoCodes.length} variant={missingGeoCodes.length ? 'contained' : undefined} onClick={()=>generateMissingGeocodes()}>Generate Missing Geocodes</Button>
+
+            </Box>
             <DataGrid
                 slots={{toolbar: CustomToolbar}}
                 density={'compact'}
-                getRowId={x=>x._id}
+                // getRowId={x=>x.id}
                 columns={columns}
-                rows={addresses}
+                rows={mergedAddresses}
             />
-
-
-            {selectedAddress && <MapIconStatusDialog
-                address={selectedAddress}
-                addVisit={addVisit}
-                handleClose={() => setSelectedAddress(null)}
-            />}
     </div>
     )
 }

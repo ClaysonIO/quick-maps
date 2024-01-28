@@ -29,31 +29,42 @@ export function AddressesAddPage() {
         setAddresses(newAddresses);
     }
 
-    function saveAddresses(){
+    function saveAddresses() {
         updateAll.mutateAsync(addresses);
     }
 
 
     return (
-        <div>
+        <main style={{padding: '1em'}}>
             <h1>Add Addresses</h1>
-            <p>Project ID: {projectId}</p>
+            <p>Google Sheet ID:&nbsp;
+                <b><a
+                    href={`https://docs.google.com/spreadsheets/d/${projectId}`}
+                    target={'_blank'}>{projectId}</a></b>
+            </p>
 
-            <p>You'll need to import a spreadsheet with two columns -- Name, and Address. The address should be as complete as possible, such as '123 Main St, Suite 456, Springfield IL, 78900, USA'</p>
-            <p>It's ok if you have multiple rows with the same address.</p>
-            <p>You can also add this information directly into the spreadsheet by opening the Google Sheet adding them to the sheet named SYSTEM_Addresses</p>
+            <p>You'll need to import a spreadsheet with two columns -- Name, and Address. The address should be as
+                complete as possible, such as <b>'123 Main St, Suite 456, Springfield IL, 78900, USA</b>'. It's ok if you
+                have multiple rows with the same address -- they'll automatically be combined into a single location.</p>
+            <p>You can also add this information directly into the spreadsheet by opening the Google Sheet adding them
+                to the sheet named SYSTEM_Addresses</p>
 
-            <div>
-            <ButtonGroup variant={'outlined'}>
-                <Button onClick={()=>createTemplate()}>Download Template</Button>
-                <Button onClick={()=>fileRef.current?.click()}>Upload Excel</Button>
-            </ButtonGroup>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <ButtonGroup variant={'outlined'}>
+                    <Button variant={'contained'} onClick={() => fileRef.current?.click()}>Upload Spreadsheet</Button>
+                    <Button onClick={() => createTemplate()}>Download Template</Button>
+                </ButtonGroup>
+                <Button
+                    variant={'contained'}
+                    color={'success'}
+                    disabled={!addresses.length}
+                    onClick={() => saveAddresses()}
+                >Save Addresses</Button>
             </div>
             <input ref={fileRef} type={'file'} onChange={importAddressesFromSpreadsheet} style={{display: 'none'}}/>
 
-            <Button onClick={()=>saveAddresses()}>Save Addresses</Button>
             <DataGrid columns={columns} rows={addresses}/>
 
-        </div>
+        </main>
     )
 }
