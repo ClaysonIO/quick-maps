@@ -11,6 +11,7 @@ import {ProjectListPage} from "./Pages/ProjectListPage.tsx";
 import {AddressesAddPage} from "./Pages/AddressesAddPage.tsx";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.min.css';
+import {PrivacyPage} from "./Pages/PrivacyPage.tsx";
 
 function App() {
     const {user} = useUser();
@@ -26,10 +27,16 @@ function App() {
                     <Route path={"/projects/:projectId/map/:groupId"} element={<MapPage/>}/>
                     <Route path={"/projects/:projectId/addresses"} element={<AddressListPage/>}/>
                     <Route path={"/projects/:projectId/addresses/add"} element={<AddressesAddPage/>}/>
+                    <Route path={'/privacy'} element={<PrivacyPage/>}/>
                     <Route path={"*"} element={<Navigate to={"/projects"}/>}/>
                 </Route>
             </Routes>
-                : <LoginPage/>}
+                :
+                <Routes>
+                    <Route path={'/privacy'} element={<PrivacyPage/>}/>
+                    <Route path={'*'} element={<LoginPage/>}/>
+                </Routes>
+            }
             <ToastContainer
                 position={"bottom-left"}
             />
