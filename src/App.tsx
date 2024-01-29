@@ -2,9 +2,6 @@ import React from "react";
 import './App.css'
 import {MapPage} from "./Pages/MapPage.tsx";
 import {Route, BrowserRouter, Routes, Navigate} from "react-router-dom";
-import {GroupEditPage} from "./Pages/GroupEditPage.tsx";
-import {SettingsPage} from "./Pages/SettingsPage.tsx";
-import {GroupListPage} from "./Pages/GroupListPage.tsx";
 import {Layout} from "./Components/Layout.tsx";
 import {LoginPage} from "./Pages/LoginPage.tsx";
 import {AddressListPage} from "./Pages/AddressListPage.tsx";
@@ -27,11 +24,8 @@ function App() {
                     <Route path={"/projects/create"} element={<ProjectCreatePage/>}/>
                     <Route path={"/projects/:projectId/map"} element={<MapPage/>}/>
                     <Route path={"/projects/:projectId/map/:groupId"} element={<MapPage/>}/>
-                    <Route path={"/projects/:projectId/groups"} element={<GroupListPage/>}/>
-                    <Route path={"/projects/:projectId/groups/edit"} element={<GroupEditPage/>}/>
                     <Route path={"/projects/:projectId/addresses"} element={<AddressListPage/>}/>
                     <Route path={"/projects/:projectId/addresses/add"} element={<AddressesAddPage/>}/>
-                    <Route path={"/projects/:projectId/settings"} element={<SettingsPage/>}/>
                     <Route path={"*"} element={<Navigate to={"/projects"}/>}/>
                 </Route>
             </Routes>
