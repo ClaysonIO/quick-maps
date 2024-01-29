@@ -14,17 +14,14 @@ import {
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
-import {ErrorBar} from "./ErrorBar.tsx";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useUser} from "../Hooks/useUser.ts";
-import {useErrors} from "../Hooks/useErrors.ts";
 import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
 
 export function Layout() {
     const {projectId} = useParams<{projectId: string}>()
-    const {errors} = useErrors()
     const {user, logout} = useUser();
     const [userAnchorEl, setUserAnchorEl] = React.useState<null | HTMLElement>(null);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -182,6 +179,5 @@ export function Layout() {
         <div style={{flex: 1}}>
             <Outlet/>
         </div>
-        {errors.map((error, index)=>(<ErrorBar key={index} error={error}/>))}
     </div>
 }

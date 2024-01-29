@@ -8,13 +8,15 @@ export function useAddresses({projectId, groupId}: {projectId: string, groupId?:
         data,
         loading,
         updateAll,
-        updateOne
+        updateOne,
+        addMultiple
     } = useGoogleSheet<IAddress>(projectId, GoogleSheets.SYSTEM_Addresses)
 
     return {
         data: groupId ? data.filter(x=>x.groupId === groupId) : data,
         loading,
         updateAll,
-        updateOne
+        updateOne,
+        addMultiple
     }
 }

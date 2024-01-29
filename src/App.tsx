@@ -1,3 +1,4 @@
+import React from "react";
 import './App.css'
 import {MapPage} from "./Pages/MapPage.tsx";
 import {Route, BrowserRouter, Routes, Navigate} from "react-router-dom";
@@ -11,6 +12,8 @@ import {useUser} from "./Hooks/useUser.ts";
 import {ProjectCreatePage} from "./Pages/ProjectCreatePage.tsx";
 import {ProjectListPage} from "./Pages/ProjectListPage.tsx";
 import {AddressesAddPage} from "./Pages/AddressesAddPage.tsx";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.min.css';
 
 function App() {
     const {user} = useUser();
@@ -33,6 +36,9 @@ function App() {
                 </Route>
             </Routes>
                 : <LoginPage/>}
+            <ToastContainer
+                position={"bottom-left"}
+            />
         </BrowserRouter>
     )
 }

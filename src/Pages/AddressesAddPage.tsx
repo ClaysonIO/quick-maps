@@ -1,21 +1,21 @@
 import {useParams} from "react-router";
-import {Button, ButtonGroup, TextField} from "@mui/material";
-import React, {useMemo, useState} from "react";
+import {Button, ButtonGroup} from "@mui/material";
+import React, { useState} from "react";
 import {DataGrid} from "@mui/x-data-grid";
 import {useAddressXLSX} from "../Hooks/useAddressXLSX.ts";
 import {useAddresses} from "../Hooks/useAddresses.ts";
 import {IAddress} from "../Interfaces/AddressSchema.ts";
+import {useGeocodes} from "../Hooks/useGeocodes.ts";
+import {useNavigate} from "react-router-dom";
 
-interface IParsedAddress {
-    name: string;
-    address: string;
-}
 
 export function AddressesAddPage() {
+    const navigate = useNavigate();
     const {projectId} = useParams() as { projectId: string };
     const {getAddressesFromSpreadsheet, createTemplate} = useAddressXLSX();
-    const {updateAll} = useAddresses({projectId})
+    const {addMultiple, updateAll} = useAddresses({projectId})
     const fileRef = React.useRef<HTMLInputElement>(null);
+    const {data: geocodes, generateGeocodesFromAddresses} = useGeocodes({projectId});
 
     const [addresses, setAddresses] = useState<IAddress[]>([]);
 
@@ -30,7 +30,29 @@ export function AddressesAddPage() {
     }
 
     function saveAddresses() {
-        updateAll.mutateAsync(addresses);
+        addMultiple.mutateAsync(addresses)
+            .then(()=>{
+                //Get all addresses that don't already have a geocode
+                const geocodedAddresses = geocodes.map(x=>x.address);
+                const addressesToGeocode = addresses
+                    .filter(x=>!geocodedAddresses.includes(x.address))
+                    .map(x=>x.address);
+                return generateGeocodesFromAddresses(addressesToGeocode);
+            })
+            .then(()=>navigate(`/projects/${projectId}/addresses`));
+    }
+
+    function resplaceAddresses() {
+        updateAll.mutateAsync(addresses)
+            .then(()=>{
+                //Get all addresses that don't already have a geocode
+                const geocodedAddresses = geocodes.map(x=>x.address);
+                const addressesToGeocode = addresses
+                    .filter(x=>!geocodedAddresses.includes(x.address))
+                    .map(x=>x.address);
+                return generateGeocodesFromAddresses(addressesToGeocode);
+            })
+            .then(()=>navigate(`/projects/${projectId}/addresses`));
     }
 
 
@@ -54,12 +76,20 @@ export function AddressesAddPage() {
                     <Button variant={'contained'} onClick={() => fileRef.current?.click()}>Upload Spreadsheet</Button>
                     <Button onClick={() => createTemplate()}>Download Template</Button>
                 </ButtonGroup>
+                <ButtonGroup variant={'outlined'}>
                 <Button
                     variant={'contained'}
                     color={'success'}
                     disabled={!addresses.length}
                     onClick={() => saveAddresses()}
-                >Save Addresses</Button>
+                >Add New Addresses</Button>
+                <Button
+                    variant={'contained'}
+                    color={'success'}
+                    disabled={!addresses.length}
+                    onClick={() => resplaceAddresses()}
+                >Replace Existing Addresses</Button>
+                </ButtonGroup>
             </div>
             <input ref={fileRef} type={'file'} onChange={importAddressesFromSpreadsheet} style={{display: 'none'}}/>
 

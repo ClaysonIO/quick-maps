@@ -1,4 +1,3 @@
-import {useUser} from "../Hooks/useUser.ts";
 import {Button, CircularProgress, TextField} from "@mui/material";
 import {useState} from "react";
 import {useProjects} from "../Hooks/useProjects.ts";
@@ -6,7 +5,6 @@ import {useNavigate} from "react-router-dom";
 
 export function ProjectCreatePage(){
     const navigate = useNavigate();
-    const {user, logout} = useUser();
     const [loading, setLoading] = useState(false)
     const {create, status} = useProjects();
     const [name, setName] = useState<string>('Default Visit Tracker Sheet');
@@ -15,7 +13,7 @@ export function ProjectCreatePage(){
         if(name){
             setLoading(true)
             const newProject = await create(name);
-            navigate(`/project/${newProject?.id}`)
+            navigate(`/projects/${newProject?.id}/map`)
         }
     }
 

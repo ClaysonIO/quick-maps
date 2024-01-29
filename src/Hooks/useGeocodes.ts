@@ -1,6 +1,8 @@
 import {useGoogleSheet} from "./useGoogleSheet.ts";
 import {IGeocode} from "../Interfaces/GeocodeSchema.ts";
 import {GoogleSheets} from "./useProjects.ts";
+import {toast} from "react-toastify";
+import {useRef} from "react";
 
 export interface IMapTilerBatchGeocodeResponse {
     features: {
@@ -26,9 +28,15 @@ export function useGeocodes({projectId}: { projectId: string }) {
         addMultiple,
     } = useGoogleSheet<IGeocode>(projectId, GoogleSheets.SYSTEM_Geocodes)
 
+    const toastId = useRef<any>(null);
     async function generateGeocodesFromAddresses(addresses: string[]) {
         const geocodes: IGeocode[] = []
-        for (const address of addresses) {
+        if (toastId.current === null) {
+            toastId.current = toast("Generating Geocodes...", {progress: 0, type: 'info'});
+        }
+        for (let i = 0; i < addresses.length; i++) {
+            toast.update(toastId.current, {progress: i / addresses.length, });
+            const address = addresses[i];
             const parsedAddress = address.split(' ').join('+');
             const url = `https://api.radar.io/v1/geocode/forward?query=${parsedAddress}&layers=address`
             const response = await fetch(url, {headers: {"Authorization": import.meta.env.VITE_RADAR_API_KEY}});
@@ -43,9 +51,9 @@ export function useGeocodes({projectId}: { projectId: string }) {
                 latitude: singleAddress.latitude,
                 longitude: singleAddress.longitude
             }
-console.log("GEOCODE", newGeocode)
             geocodes.push(newGeocode);
         }
+        toast.dismiss(toastId.current);
         await addMultiple.mutateAsync(geocodes);
     }
 

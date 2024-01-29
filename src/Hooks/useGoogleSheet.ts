@@ -1,16 +1,15 @@
-import {useErrors} from "./useErrors.ts";
 import {useUser} from "./useUser.ts";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {GoogleSpreadsheet} from "google-spreadsheet";
+import {toast} from "react-toastify";
 
 export function useGoogleSheet<T>(projectId: string, sheetId: string) {
 
-    const {addError} = useErrors();
     const {credentials} = useUser();
     const queryClient = useQueryClient();
 
     const {data, isLoading, isFetching} = useQuery({
-        queryKey: [sheetId],
+        queryKey: [sheetId, {projectId}],
         queryFn: async () => {
             if(!credentials) return []
             const doc = new GoogleSpreadsheet(projectId, {token: credentials.access_token});
@@ -36,7 +35,8 @@ export function useGoogleSheet<T>(projectId: string, sheetId: string) {
             queryClient.invalidateQueries({queryKey: [sheetId]});
         },
         onError: (error: any)=>{
-            addError("Error setting data. Try again later. Error: " + error.message ?? "")
+            toast("Error updating data. Try again later. Error: " + error.message ?? "")
+            // addError("Error setting data. Try again later. Error: " + error.message ?? "")
         }
     })
 
@@ -56,24 +56,35 @@ export function useGoogleSheet<T>(projectId: string, sheetId: string) {
             queryClient.invalidateQueries({queryKey: [sheetId]});
         },
         onError: (error)=>{
-            addError("Error setting single data. Try again later. Error: " + error.message ?? "")
+            toast("Error updating single data. Try again later. Error: " + error.message ?? "")
         }
     })
 
     const addMultiple = useMutation({
         mutationFn: async (newRows: (T)[]) => {
             if(!credentials) throw new Error("Not logged in")
-            const doc = new GoogleSpreadsheet(projectId, {token: credentials.access_token});
-            await doc.loadInfo()
-            const sheet = doc.sheetsByTitle[sheetId];
-            const result = await sheet.addRows(newRows as any);
-            console.log("RESULT", result)
+            toast.promise(new Promise<void>(async (resolve, reject)=>{
+                const doc = new GoogleSpreadsheet(projectId, {token: credentials.access_token});
+                await doc.loadInfo()
+                const sheet = doc.sheetsByTitle[sheetId];
+                const result = await sheet.addRows(newRows as any);
+                console.log("RESULT", result)
+                queryClient.setQueryData([sheetId, {projectId}], (oldData: T[])=>[...oldData, ...newRows])
+                resolve();
+            }),
+                {
+                    pending: "Adding data...",
+                    success: "Data added successfully",
+                    error: "Error adding data"
+                }
+            )
         },
         onSuccess:()=>{
-            queryClient.invalidateQueries({queryKey: [sheetId]});
+            // queryClient.invalidateQueries({queryKey: [sheetId]});
         },
         onError: (error: any)=>{
-            addError("Error setting data. Try again later. Error: " + error.message ?? "")
+            // addError("Error setting data. Try again later. Error: " + error.message ?? "")
+            toast("Error adding rows. Try again later. Error: " + error.message ?? "")
         }
     })
 

@@ -2,16 +2,16 @@ import React, {useEffect, useMemo} from 'react';
 import {MapContainer} from 'react-leaflet/MapContainer'
 import {TileLayer} from 'react-leaflet/TileLayer'
 import 'leaflet/dist/leaflet.css'
-import {useAddresses} from "../Hooks/useAddresses.ts";
 import {Marker, useMap} from "react-leaflet";
 import L from 'leaflet';
 import {useParams} from "react-router";
 import {SingleAddressVisitHistoryDialog} from "../Components/SingleAddressVisitHistoryDialog.tsx";
-import {IAddress} from "../Interfaces/AddressSchema.ts";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useMergedAddresses} from "../Hooks/useMergedAddresses.ts";
 import {IMergedAddress} from "../Interfaces/MergedAddressSchema.ts";
 import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
+import {NoAddressesDialog} from "../Components/NoAddressesDialog.tsx";
+import { CircularProgress } from '@mui/material';
 
 export function MapPage() {
     const {groupId, projectId} = useParams() as { projectId: string, groupId: string };
@@ -48,6 +48,7 @@ export function MapPage() {
 
     return (
         <>
+            {!loading && !mergedAddresses.length && <NoAddressesDialog/>}
             <MapContainer
                 center={center}
                 zoom={14}
@@ -85,6 +86,20 @@ export function MapPage() {
                 mergedAddress={selectedAddress}
                 handleClose={() => setSelectedAddress(null)}
             />}
+            {loading && <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                height: '100vh',
+                width: '100vw',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 10000
+            }}>
+                <CircularProgress size={300}/>
+            </div>}
         </>
     )
 }
