@@ -1,9 +1,10 @@
 import {useLocalStorage} from "usehooks-ts";
 import {TokenResponse, useGoogleLogin} from "@react-oauth/google";
 import axios from "axios";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 
 export function useUser() {
+    const queryClient = useQueryClient();
     const [credentials, setCredentials] = useLocalStorage<TokenResponse | undefined>('google_credentials', undefined);
 
     const {data: user, refetch} = useQuery({
@@ -24,6 +25,7 @@ export function useUser() {
         onSuccess: tokenResponse => {
             console.log(tokenResponse)
             setCredentials(tokenResponse);
+            queryClient.invalidateQueries({queryKey: ['user']});
             refetch();
         },
         scope: 'https://www.googleapis.com/auth/drive.file profile email',
