@@ -17,7 +17,7 @@ function App() {
     const {user} = useUser();
 
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={"/app"}>
             {user ?
             <Routes>
                 <Route element={<Layout/>}>
