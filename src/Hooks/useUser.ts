@@ -15,7 +15,8 @@ export function useUser() {
                 return response.data;
             }
         },
-        enabled: !!credentials
+        enabled: !!credentials,
+        refetchOnWindowFocus: true
     })
 
 
