@@ -78,6 +78,23 @@ export function SettingsPage() {
         setUsers('')
     }
 
+    function exportVisits() {
+        const visits = addresses.flatMap(x => x.history.map(h => ({
+            id: crypto.randomUUID(),
+            address: x.address.split('  ').join(', ').split(' Florida').shift() + ", Florida",
+            dateTime: h.date,
+            resolutionId: h.status,
+            email: h.user,
+            notes: h.notes
+        })))
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(visits);
+        XLSX.utils.book_append_sheet(wb, ws, "Visits");
+
+        XLSX.writeFile(wb, "visits.xlsx");
+    }
+
     return <div style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '1em'}}>
         <h3>Note: This page will only work if you're the creator of this site</h3>
 
@@ -94,5 +111,6 @@ export function SettingsPage() {
         <TextField label={'Users'} multiline={true} rows={5} value={users} onChange={(e)=>setUsers(e.target.value)}/>
         <Button variant={'contained'} onClick={addUsers}>Add Users</Button>
 
+        <Button onClick={exportVisits}>Export Visits</Button>
     </div>;
 }
