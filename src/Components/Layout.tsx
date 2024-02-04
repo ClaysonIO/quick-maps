@@ -68,18 +68,21 @@ export function Layout() {
                     >
                         <MenuIcon/>
                     </IconButton>
+                    <NavLink to={'/'} style={{display: 'flex', textDecoration: 'none', color: 'white'}}>
                     <img alt={'Logo'} src={'/logo-white.svg'} style={{marginRight: '1em', height: '30px', width: '30px', color: 'white', fill: 'white'}}/>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         Visit Tracker
                     </Typography>
+                    </NavLink>
                     <div style={{flexGrow: 1}}/>
                     <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{mr: 2}}
+                        sx={{mr: 2, display: {xs: 'none', sm: 'block'}}}
                         onClick={handleFilterMenu}
+                        disabled={!projectId}
                     >
                         <FilterAltIcon/>
                     </IconButton>
@@ -91,7 +94,7 @@ export function Layout() {
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{mr: 2}}
+                        sx={{mr: 2, display: {xs: 'none', sm: 'block'}}}
                     >
                         <GitHubIcon/>
                     </IconButton>
@@ -132,17 +135,33 @@ export function Layout() {
                     id="menu-appbar"
                     anchorEl={userAnchorEl}
                     anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right',
+                        vertical: 'center',
+                        horizontal: 'left',
                     }}
                     keepMounted
                     transformOrigin={{
-                        vertical: 'bottom',
+                        vertical: 'top',
                         horizontal: 'right',
                     }}
                     open={Boolean(userAnchorEl)}
                     onClose={handleUserClose}
                 >
+                    <MenuItem
+                        sx={{display: {xs: 'block', sm: 'none'}}}
+                        onClick={(e)=>{
+                            handleFilterMenu(e)
+                            handleUserClose()}}
+                    >
+                        Filter Addresses
+                    </MenuItem>
+                    <MenuItem
+                        sx={{display: {xs: 'block', sm: 'none'}}}
+                        component={NavLink}
+                        to={'https://github.com/ClaysonIO/quick-maps'} target={'_blank'}
+                    >
+                        GitHub
+                    </MenuItem>
+
                     <MenuItem onClick={() => {logout(); window.location.reload()}}>Log Out</MenuItem>
                 </Menu>
 
@@ -150,12 +169,12 @@ export function Layout() {
                     id="menu-appbar"
                     anchorEl={filterAnchorEl}
                     anchorOrigin={{
-                        vertical: 'top',
+                        vertical: 'bottom',
                         horizontal: 'right',
                     }}
                     keepMounted
                     transformOrigin={{
-                        vertical: 'top',
+                        vertical: 'bottom',
                         horizontal: 'right',
                     }}
                     open={Boolean(filterAnchorEl)}
