@@ -1,5 +1,5 @@
 import {Outlet, useParams} from "react-router";
-import {NavLink} from "react-router-dom";
+import {NavLink, useSearchParams} from "react-router-dom";
 import {
     AppBar,
     Box,
@@ -10,19 +10,24 @@ import {
     Menu,
     Checkbox,
     FormControlLabel,
-    Avatar
+    Avatar, Dialog, DialogTitle, DialogContent, DialogActions, Button
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import React from "react";
+import React, {useMemo, useState} from "react";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useUser} from "../Hooks/useUser.ts";
 import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
+import {CalendarMonth} from "@mui/icons-material";
+import {Dayjs} from "dayjs";
+import * as dayjs from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers";
 
 export function Layout() {
     const {projectId} = useParams<{projectId: string}>()
     const {user, logout} = useUser();
+    const [dateRangeOpen, setDateRangeOpen] = useState(false);
     const [userAnchorEl, setUserAnchorEl] = React.useState<null | HTMLElement>(null);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [filterAnchorEl, setFilterAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -75,6 +80,20 @@ export function Layout() {
                     </Typography>
                     </NavLink>
                     <div style={{flexGrow: 1}}/>
+
+
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{mr: 2, display: {xs: 'none', sm: 'block'}}}
+                        onClick={()=>setDateRangeOpen(true)}
+                        disabled={!projectId}
+                    >
+                        <CalendarMonth/>
+                    </IconButton>
+
                     <IconButton
                         size="large"
                         edge="start"
@@ -148,6 +167,12 @@ export function Layout() {
                 >
                     <MenuItem
                         sx={{display: {xs: 'block', sm: 'none'}}}
+                        onClick={()=>setDateRangeOpen(true)}
+                    >
+                        Set Date Range
+                    </MenuItem>
+                    <MenuItem
+                        sx={{display: {xs: 'block', sm: 'none'}}}
                         onClick={(e)=>{
                             handleFilterMenu(e)
                             handleUserClose()}}
@@ -198,5 +223,65 @@ export function Layout() {
         <div style={{flex: 1}}>
             <Outlet/>
         </div>
+        <DateRangeDialog open={dateRangeOpen} setOpen={setDateRangeOpen}/>
     </div>
+}
+
+export function useDateRange(){
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const {startDate, endDate} = useMemo(()=>{
+        return {
+            startDate: searchParams.get('startDate'),
+            endDate: searchParams.get('endDate')
+        }
+    }, [searchParams])
+
+    function setStartDate(date: Dayjs | null){
+        if(date) searchParams.set('startDate', date.format('YYYY-MM-DD'))
+        else searchParams.delete('startDate')
+        setSearchParams(searchParams)
+    }
+    function setEndDate(date: Dayjs | null){
+        if(date) searchParams.set('endDate', date.format('YYYY-MM-DD'))
+        else searchParams.delete('endDate')
+        setSearchParams(searchParams)
+    }
+
+    return {
+        startDate: startDate ? dayjs(startDate, 'YYYY-MM-DD') : null,
+        endDate: endDate ? dayjs(endDate, 'YYYY-MM-DD') : null,
+        setStartDate,
+        setEndDate
+    }
+}
+
+export function DateRangeDialog({open, setOpen}: {open: boolean, setOpen: (open: boolean)=>void}){
+    const {startDate, endDate, setStartDate, setEndDate} = useDateRange()
+
+    function clearDates(){
+        setStartDate(null);
+        setEndDate(null);
+    }
+
+    return (
+        <>
+
+        <Dialog fullWidth={true} open={open} onClose={()=>setOpen(false)}>
+            <DialogTitle>Choose a Date Range</DialogTitle>
+
+            <DialogContent sx={{display: 'flex', flexDirection: 'column', gap: '1em', paddingTop: '1em'}}>
+                <div style={{height: '.25em'}}/>
+                <DatePicker label="Start Date" value={startDate} onChange={(v)=>setStartDate(v)}  />
+                <DatePicker label="End Date" value={endDate} onChange={(v)=>setEndDate(v)} />
+            </DialogContent>
+
+            <DialogActions sx={{display: 'flex', justifyContent: 'space-between'}}>
+                <Button color={'error'} variant={'outlined'} onClick={()=>clearDates()}>Clear Dates</Button>
+                <Button onClick={()=>setOpen(false)}>Close</Button>
+            </DialogActions>
+        </Dialog>
+
+            </>
+    )
 }
