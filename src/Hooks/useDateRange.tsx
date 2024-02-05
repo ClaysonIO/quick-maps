@@ -1,7 +1,6 @@
 import {useSearchParams} from "react-router-dom";
 import {useMemo} from "react";
-import * as dayjs from "dayjs";
-import {Dayjs} from "dayjs";
+import dayjs, {Dayjs} from "dayjs";
 
 export function useDateRange() {
     const [searchParams, setSearchParams] = useSearchParams();
