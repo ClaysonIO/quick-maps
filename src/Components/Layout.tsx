@@ -10,7 +10,7 @@ import {
     Menu,
     Checkbox,
     FormControlLabel,
-    Avatar, Dialog, DialogTitle, DialogContent, DialogActions, Button
+    Avatar, Dialog, DialogTitle, DialogContent, DialogActions, Button, Divider
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React, {useMemo, useState} from "react";
@@ -166,26 +166,28 @@ export function Layout() {
                     onClose={handleUserClose}
                 >
                     <MenuItem
-                        sx={{display: {xs: 'block', sm: 'none'}}}
+                        sx={{display: {xs: 'flex', sm: 'none'}}}
                         onClick={()=>setDateRangeOpen(true)}
                     >
                         Set Date Range
                     </MenuItem>
                     <MenuItem
-                        sx={{display: {xs: 'block', sm: 'none'}}}
+                        sx={{display: {xs: 'flex', sm: 'none'}}}
                         onClick={(e)=>{
                             handleFilterMenu(e)
                             handleUserClose()}}
                     >
                         Filter Addresses
                     </MenuItem>
+                    <Divider/>
                     <MenuItem
-                        sx={{display: {xs: 'block', sm: 'none'}}}
+                        sx={{display: {xs: 'flex', sm: 'none'}}}
                         component={NavLink}
                         to={'https://github.com/ClaysonIO/quick-maps'} target={'_blank'}
                     >
                         GitHub
                     </MenuItem>
+                    <Divider/>
 
                     <MenuItem onClick={() => {logout(); window.location.reload()}}>Log Out</MenuItem>
                 </Menu>
