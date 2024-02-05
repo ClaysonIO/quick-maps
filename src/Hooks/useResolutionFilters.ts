@@ -10,7 +10,7 @@ export function useResolutionFilters(){
     const {data: mergedAddresses} = useMergedAddresses({projectId});
     const {data: resolutionTypes} = useResolutionTypes({projectId});
 
-    const [filters, setFilters] = useLocalStorage<string[]>(
+    const [filters, setFilters] = useLocalStorage<(string)[]>(
         'filters', resolutionTypes.map(({id})=>id));
 
     function toggleFilter(id: string){
@@ -28,7 +28,7 @@ export function useResolutionFilters(){
     }
 
     function filterCount(statusId: string){
-        return mergedAddresses.filter(address=>address.status?.id === statusId).length;
+        return mergedAddresses.filter(address=>(address.status?.id ?? 'undefined') === statusId).length;
     }
 
     return {filters, setFilters, toggleFilter, filterStatus, filterCount}

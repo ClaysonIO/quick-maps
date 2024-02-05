@@ -28,7 +28,7 @@ export function useMergedAddresses({projectId, geocodeOnly}: {projectId: string,
             const currentVisit = visitsAtLocation.slice().pop()
 
             const resolutionType = resolutionTypes
-                .find(x=>x.id === currentVisit?.resolutionId)
+                .find(x=>x.id === (currentVisit?.resolutionId ?? 'undefined'))
 
             const mergedAddress: IMergedAddress = {
                 id: crypto.randomUUID(),

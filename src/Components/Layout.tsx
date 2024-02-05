@@ -1,28 +1,27 @@
 import {Outlet, useParams} from "react-router";
-import {NavLink, useSearchParams} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {
     AppBar,
+    Avatar,
     Box,
-    IconButton,
-    Toolbar,
-    Typography,
-    MenuItem,
-    Menu,
     Checkbox,
+    Divider,
     FormControlLabel,
-    Avatar, Dialog, DialogTitle, DialogContent, DialogActions, Button, Divider
+    IconButton,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Typography
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import React, {useMemo, useState} from "react";
+import React, {useState} from "react";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useUser} from "../Hooks/useUser.ts";
 import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
 import {CalendarMonth} from "@mui/icons-material";
-import {Dayjs} from "dayjs";
-import * as dayjs from "dayjs";
-import { DatePicker } from "@mui/x-date-pickers";
+import {DateRangeDialog} from "./DateRangeDialog.tsx";
 
 export function Layout() {
     const {projectId} = useParams<{projectId: string}>()
@@ -229,61 +228,3 @@ export function Layout() {
     </div>
 }
 
-export function useDateRange(){
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    const {startDate, endDate} = useMemo(()=>{
-        return {
-            startDate: searchParams.get('startDate'),
-            endDate: searchParams.get('endDate')
-        }
-    }, [searchParams])
-
-    function setStartDate(date: Dayjs | null){
-        if(date) searchParams.set('startDate', date.format('YYYY-MM-DD'))
-        else searchParams.delete('startDate')
-        setSearchParams(searchParams)
-    }
-    function setEndDate(date: Dayjs | null){
-        if(date) searchParams.set('endDate', date.format('YYYY-MM-DD'))
-        else searchParams.delete('endDate')
-        setSearchParams(searchParams)
-    }
-
-    return {
-        startDate: startDate ? dayjs(startDate, 'YYYY-MM-DD') : null,
-        endDate: endDate ? dayjs(endDate, 'YYYY-MM-DD') : null,
-        setStartDate,
-        setEndDate
-    }
-}
-
-export function DateRangeDialog({open, setOpen}: {open: boolean, setOpen: (open: boolean)=>void}){
-    const {startDate, endDate, setStartDate, setEndDate} = useDateRange()
-
-    function clearDates(){
-        setStartDate(null);
-        setEndDate(null);
-    }
-
-    return (
-        <>
-
-        <Dialog fullWidth={true} open={open} onClose={()=>setOpen(false)}>
-            <DialogTitle>Choose a Date Range</DialogTitle>
-
-            <DialogContent sx={{display: 'flex', flexDirection: 'column', gap: '1em', paddingTop: '1em'}}>
-                <div style={{height: '.25em'}}/>
-                <DatePicker label="Start Date" value={startDate} onChange={(v)=>setStartDate(v)}  />
-                <DatePicker label="End Date" value={endDate} onChange={(v)=>setEndDate(v)} />
-            </DialogContent>
-
-            <DialogActions sx={{display: 'flex', justifyContent: 'space-between'}}>
-                <Button color={'error'} variant={'outlined'} onClick={()=>clearDates()}>Clear Dates</Button>
-                <Button onClick={()=>setOpen(false)}>Close</Button>
-            </DialogActions>
-        </Dialog>
-
-            </>
-    )
-}

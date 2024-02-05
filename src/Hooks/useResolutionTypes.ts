@@ -11,7 +11,7 @@ export function useResolutionTypes({projectId}: {projectId: string }) {
     } = useGoogleSheet<IResolutionType>(projectId, GoogleSheets.SYSTEM_ResolutionTypes)
 
     return {
-        data,
+        data: data.concat([{id: 'undefined', name: 'No Visits Recorded', color: 'rgba(0,0,0,.2)', description: 'No visits recorded.'}]),
         loading,
         updateAll,
         updateOne
