@@ -1,8 +1,14 @@
 import {useGoogleSheet} from "./useGoogleSheet.ts";
 import {GoogleSheets} from "./useProjects.ts";
 import {IVisit, VisitSchema} from "../Interfaces/VisitSchema.ts";
+import {useDateRange} from "../Components/Layout.tsx";
+import {useMemo} from "react";
+import dayjs from "dayjs";
 
 export function useVisits({projectId}: {projectId: string }) {
+
+    const {startDate, endDate} = useDateRange()
+
     const {
         data,
         loading,
@@ -11,8 +17,21 @@ export function useVisits({projectId}: {projectId: string }) {
         addMultiple
     } = useGoogleSheet<IVisit>(projectId, GoogleSheets.SYSTEM_Visits)
 
+
+    const filteredDate = useMemo(()=>{
+        return data.filter(x=>{
+            if(!x.dateTime) return false
+            const date = dayjs(x.dateTime)
+            if(startDate && date.isBefore(startDate)) return false
+            if(endDate && date.isAfter(endDate)) return false
+            return true
+        })
+
+
+    }, [startDate, endDate, data])
+
     return {
-        data: data.map(x=>(VisitSchema.parse(x))),
+        data: filteredDate.map(x=>(VisitSchema.parse(x))),
         loading,
         updateAll,
         updateOne,
