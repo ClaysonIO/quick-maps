@@ -6,12 +6,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        app: "./app.html"
+        app: "./index.html"
       }
     }
   },
   server: {
-    open: './app.html'
+    open: './index.html'
   },
   plugins: [
     react(),
