@@ -19,6 +19,7 @@ export function ProjectListPage() {
             ]},
         {field: 'name', headerName: 'Name', flex: 1},
         {field: 'share', type: 'actions', getActions: ({row}) => [
+                //@ts-expect-error
                 <GridActionsCellItem component={NavLink} to={`/projects/${row.id}/share`} label={'Share'} icon={<ForwardToInboxIcon/>}/>
             ]},
     ]
