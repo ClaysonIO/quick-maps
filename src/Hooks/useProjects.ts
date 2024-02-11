@@ -21,10 +21,16 @@ export enum GoogleSheets {
     SYSTEM_Groups = "SYSTEM_Groups",
 }
 
-export function useProjects() {
+export function useProjects(projectId?: string) {
     const {credentials} = useUser();
     const [projects, setProjects] = useLocalStorage<IProject[]>('projects', []);
     const [status, setStatus] = useState<string>('');
+
+    function addProject(project: IProject) {
+        if(!projects.find(p=>p.id === project.id)){
+            setProjects([...projects, project])
+        }
+    }
 
     async function create(name: string) {
         if (credentials) {
@@ -69,5 +75,7 @@ export function useProjects() {
         }
     }
 
-    return {data: projects, create, status}
+    const project = projects.find(p=>p.id === projectId)
+
+    return {data: projects, singleData: project, create, status, addProject}
 }

@@ -19,7 +19,7 @@ export function ProjectListPage() {
             ]},
         {field: 'name', headerName: 'Name', flex: 1},
         {field: 'share', type: 'actions', getActions: ({row}) => [
-                <GridActionsCellItem label={'Share'} icon={<ForwardToInboxIcon/>} onClick={()=>setShare(row.id)}/>
+                <GridActionsCellItem component={NavLink} to={`/projects/${row.id}/share`} label={'Share'} icon={<ForwardToInboxIcon/>}/>
             ]},
     ]
 

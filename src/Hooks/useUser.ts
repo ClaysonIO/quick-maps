@@ -28,7 +28,7 @@ export function useUser() {
             queryClient.invalidateQueries({queryKey: ['user']});
             refetch();
         },
-        scope: 'https://www.googleapis.com/auth/drive.file profile email',
+        scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/spreadsheets profile email',
     });
 
     function logout() {
