@@ -216,9 +216,6 @@ export function Layout() {
                             Toggle All
                         </Button>
                     </MenuItem>
-                    {/*<MenuItem key={'selectAll'} sx={{gap: '0.5em'}}>*/}
-                    {/*    Select All*/}
-                    {/*</MenuItem>*/}
                     {resolutionTypes.map((resolution) => (
                         <MenuItem key={resolution.id} sx={{gap: '0.5em'}}>
                             <FormControlLabel

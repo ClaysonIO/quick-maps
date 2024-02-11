@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
-import {DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport} from "@mui/x-data-grid";
-
+import {DataGrid, GridActionsCellItem, GridColDef, GridToolbarContainer, GridToolbarExport} from "@mui/x-data-grid";
+import AddIcon from '@mui/icons-material/Add'
 import {useParams} from "react-router";
 import {useMergedAddresses} from "../Hooks/useMergedAddresses.ts";
 import {useGeocodes} from "../Hooks/useGeocodes.ts";
@@ -9,6 +9,7 @@ import {Box, Button} from '@mui/material';
 import {NavLink} from "react-router-dom";
 import {useResolutionFilters} from "../Hooks/useResolutionFilters.ts";
 import {useResolutionTypes} from "../Hooks/useResolutionTypes.ts";
+import {SingleAddressVisitHistoryDialog} from "../Components/SingleAddressVisitHistoryDialog.tsx";
 
 export function AddressListPage(){
     const {projectId} = useParams() as {projectId: string};
@@ -16,6 +17,8 @@ export function AddressListPage(){
     const {filters} = useResolutionFilters();
     const {data: resolutionTypes} = useResolutionTypes({projectId});
     const {generateGeocodesFromAddresses} = useGeocodes({projectId});
+    const [selectedAddress, setSelectedAddress] = React.useState<IMergedAddress | null>(null)
+
 
     const missingGeoCodes = useMemo(()=>mergedAddresses
         .filter(x=>!x.geocode?.latitude),
@@ -25,9 +28,9 @@ export function AddressListPage(){
     }
 
     const columns: GridColDef<IMergedAddress>[] = [
-        // {field: 'actions', width: 40, type: 'actions', getActions: ({row}) => [
-        //     <GridActionsCellItem label={'Edit'} icon={<Add/>} onClick={()=>setSelectedAddress(row)}/>
-        //     ]},
+        {field: 'actions', width: 40, type: 'actions', getActions: ({row}) => [
+            <GridActionsCellItem label={'Edit'} icon={<AddIcon/>} onClick={()=>setSelectedAddress(row)}/>
+            ]},
         { field: 'occupants', headerName: 'Name', flex: 2, valueGetter: ({row})=>row.occupants.map(x=>x.name).join(', ')},
         { field: 'address', headerName: 'Address', flex: 1, renderCell: ({row})=> <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(row.address)}`} target={'_blank'}>{row.address}</a>},
         {
@@ -54,11 +57,19 @@ export function AddressListPage(){
 
             </Box>
             <DataGrid
+                checkboxSelection={true}
+
                 slots={{toolbar: CustomToolbar}}
                 density={'compact'}
                 columns={columns}
                 rows={filteredAddresses}
             />
+
+            {selectedAddress && <SingleAddressVisitHistoryDialog
+                projectId={projectId}
+                mergedAddress={selectedAddress}
+                handleClose={() => setSelectedAddress(null)}
+            />}
     </div>
     )
 }

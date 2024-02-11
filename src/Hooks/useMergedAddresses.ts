@@ -21,11 +21,11 @@ export function useMergedAddresses({projectId, geocodeOnly}: {projectId: string,
                 .filter(x=>x.address === address)
             const visitsAtLocation = visits
                 .filter(x=>x.address === address)
-                .sort((a,b)=>a.dateTime.getTime() - b.dateTime.getTime());
+                .sort((a,b)=>b.dateTime.getTime() - a.dateTime.getTime());
             const geocodeForLocation = geocodes
                 .find(x=>x.address === address)
 
-            const currentVisit = visitsAtLocation.slice().pop()
+            const currentVisit = visitsAtLocation.slice().shift()
 
             const resolutionType = resolutionTypes
                 .find(x=>x.id === (currentVisit?.resolutionId ?? 'undefined'))
