@@ -3,7 +3,7 @@ import {NavLink} from "react-router-dom";
 import {
     AppBar,
     Avatar,
-    Box,
+    Box, Button,
     Checkbox,
     Divider,
     FormControlLabel,
@@ -34,7 +34,7 @@ export function Layout() {
     //@ts-expect-error //TODO: Move this into a component that only renders if projectId is set
     const {data: resolutionTypes} = useResolutionTypes({projectId});
 
-    const {filterCount, toggleFilter, filterStatus} = useResolutionFilters();
+    const {filterCount, toggleFilter, toggleAllFilters, filterStatus} = useResolutionFilters();
 
     const handleUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setUserAnchorEl(event.currentTarget);
@@ -198,6 +198,7 @@ export function Layout() {
                         vertical: 'bottom',
                         horizontal: 'right',
                     }}
+                    sx={{display: 'flex', flexDirection: 'column'}}
                     keepMounted
                     transformOrigin={{
                         vertical: 'bottom',
@@ -206,6 +207,18 @@ export function Layout() {
                     open={Boolean(filterAnchorEl)}
                     onClose={handleFilterClose}
                 >
+                    <MenuItem>
+                        <Button
+                            variant={'contained'}
+                            sx={{flex: 1}}
+                            onClick={toggleAllFilters}
+                        >
+                            Toggle All
+                        </Button>
+                    </MenuItem>
+                    {/*<MenuItem key={'selectAll'} sx={{gap: '0.5em'}}>*/}
+                    {/*    Select All*/}
+                    {/*</MenuItem>*/}
                     {resolutionTypes.map((resolution) => (
                         <MenuItem key={resolution.id} sx={{gap: '0.5em'}}>
                             <FormControlLabel

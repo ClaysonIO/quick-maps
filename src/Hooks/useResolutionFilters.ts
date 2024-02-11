@@ -31,5 +31,13 @@ export function useResolutionFilters(){
         return mergedAddresses.filter(address=>(address.status?.id ?? 'undefined') === statusId).length;
     }
 
-    return {filters, setFilters, toggleFilter, filterStatus, filterCount}
+    function toggleAllFilters(){
+        if (filters.length === resolutionTypes.length + 1){
+            setFilters([])
+        } else {
+            setFilters(resolutionTypes.map(({id})=>id).concat('undefined'))
+        }
+    }
+
+    return {filters, setFilters, toggleFilter, toggleAllFilters, filterStatus, filterCount}
 }
